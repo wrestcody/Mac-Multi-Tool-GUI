@@ -22,6 +22,10 @@
 - (NSMutableArray *)getWholeDiskIdentifiers;
 - (NSMutableArray *)getVolumesFromDisks;
 - (NSMutableArray *)getOutlineViewList;
+- (NSMutableArray *)getVolumesViewList;
+- (NSMutableArray *)getDiskViewList:(id)disk;
+- (NSString *)getBootDeviceNode;
+
 - (NSString *)getReadableSizeFromString:(NSString *)string;
 
 @end

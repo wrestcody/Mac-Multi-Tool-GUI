@@ -11,25 +11,20 @@
 @interface CNDiskRep : NSObject
 
 @property (nonatomic, retain) NSMutableArray *children;
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSMutableDictionary *objects;
 @property (nonatomic)         BOOL isChild;
 @property (nonatomic)         BOOL isBoot;
-@property (nonatomic, retain) NSString *size;
-@property (nonatomic, retain) NSString *identifier;
-@property (nonatomic, retain) NSString *type;
-
-- (id)initWithName:(NSString *)name;
-- (id)initWithName:(NSString *)name child:(id)child;
-- (id)initWithName:(NSString *)name children:(NSMutableArray *)children;
 
 - (void)addChild:(id)child;
+- (void)setObject:(id)object forKey:(NSString *)key;
+- (void)setObjects:(NSMutableDictionary *)objects;
 
-- (NSString *)getName;
 - (BOOL)isChild;
 - (BOOL)isBoot;
-- (NSString *)getSize;
-- (NSString *)getIdentifier;
-- (NSString *)getType;
+
+- (id)objectForKey:(NSString *)key;
+- (NSMutableDictionary *)getObjects;
+
 - (NSMutableArray *)getChildren;
 - (unsigned long)numberOfChildren;
 - (id)childAtIndex:(unsigned long)index;

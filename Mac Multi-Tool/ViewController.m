@@ -16,12 +16,17 @@
     // set the Data Source and Delegate
     [_diskView setDataSource:(id<NSOutlineViewDataSource>)self];
     [_diskView setDelegate:(id<NSOutlineViewDelegate>)self];
+    
+    //Set up for receiving double-click notifications
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"OutlineViewDoubleClick" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(outlineViewDoubleClick:) name:@"OutlineViewDoubleClick" object:nil];
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     _disks = [[CNDiskList sharedList] getOutlineViewList];
+    //_disks = [[CNDiskList sharedList] getVolumesViewList];
     // Do any additional setup after loading the view.
 }
 
@@ -31,6 +36,11 @@
     // Update the view, if already loaded.
 }
 
+- (void)outlineViewDoubleClick:(id)note {
+    //Load the disk that we just double clicked.
+    _disks = [[CNDiskList sharedList] getDiskViewList:[note userInfo]];
+    [_diskView reloadData];
+}
 
 #pragma mark -
 #pragma mark Outline View Delegate Methods
@@ -90,6 +100,12 @@
 - (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(nullable NSTableColumn *)tableColumn byItem:(nullable id)item {
     
     if ([item isKindOfClass:[CNDiskRep class]]) {
+        
+        //Check for nil and return if so
+        if (![item objectForKey:[tableColumn identifier]]) {
+            return nil;
+        }
+        
         NSColor *color = [NSColor blackColor];
         //Set up the text color
         if ([item isChild]) {
@@ -97,19 +113,13 @@
         }
         
         //Set text color to blue if boot drive/partition
-        if ([item isBoot] && [[tableColumn identifier] isEqualToString:@"Name"]) {
+        if ([item isBoot] && [[tableColumn identifier] isEqualToString:@"MediaName"]) {
             color = [NSColor blueColor];
         }
         
         NSDictionary *attrs = @{ NSForegroundColorAttributeName : color };
-        
-        if ([[tableColumn identifier] isEqualToString:@"Type"]) {
-            return [[NSAttributedString alloc] initWithString:[item getType] attributes:attrs];
-        }
-        if ([[tableColumn identifier] isEqualToString:@"Name"]) {
-            return [[NSAttributedString alloc] initWithString:[item getName] attributes:attrs];
-        }
-        if ([[tableColumn identifier] isEqualToString:@"Size"]) {
+
+        if ([[tableColumn identifier] isEqualToString:@"Size"] || [[tableColumn identifier] isEqualToString:@"DeviceIdentifier"]) {
             
             //Set pararaph style to align right, and rebuild attributes dictionary
             NSMutableParagraphStyle *paragrahStyle = [[NSMutableParagraphStyle alloc] init];
@@ -120,19 +130,11 @@
                                     NSParagraphStyleAttributeName : paragrahStyle
                                     };
             
-            return [[NSAttributedString alloc] initWithString:[item getSize] attributes:attrs];
+            return [[NSAttributedString alloc] initWithString:[item objectForKey:[tableColumn identifier]] attributes:attrs];
         }
-        if ([[tableColumn identifier] isEqualToString:@"Identifier"]) {
-            NSMutableParagraphStyle *paragrahStyle = [[NSMutableParagraphStyle alloc] init];
-            [paragrahStyle setAlignment:NSTextAlignmentRight];
-            
-            NSDictionary *attrs = @{
-                                    NSForegroundColorAttributeName : color,
-                                    NSParagraphStyleAttributeName : paragrahStyle
-                                    };
-            
-            return [[NSAttributedString alloc] initWithString:[item getIdentifier] attributes:attrs];
-        }
+        
+        //Just return whatever is left
+        return [[NSAttributedString alloc] initWithString:[item objectForKey:[tableColumn identifier]] attributes:attrs];
     }
     
     return nil;

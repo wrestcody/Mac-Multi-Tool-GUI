@@ -28,7 +28,7 @@
     NSPoint localPoint = [self convertPoint:theEvent.locationInWindow
                                    fromView:nil];
     NSInteger row = [self rowAtPoint:localPoint];
-    NSInteger col = [self columnAtPoint:localPoint];
+    //NSInteger col = [self columnAtPoint:localPoint];
     
     // If the user didn't click on a row, we're done
     if (row < 0) {
@@ -36,15 +36,15 @@
     }
     
     // Get the view clicked on
-    NSCell *cell = [self preparedCellAtColumn:col row:row ];
+    //NSCell *cell = [self preparedCellAtColumn:col row:row ];
     
     
     // If the field can be edited, pop the editor into edit mode
     /*if (view.textField.isEditable) {
         [[view window] makeFirstResponder:view.textField];
     }*/
-    
-    NSLog(@"Title: %@", cell.stringValue);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"OutlineViewDoubleClick" object:self userInfo:[self itemAtRow:row]];
+    //NSLog(@"Title: %@", cell.stringValue);
 }
 
 @end

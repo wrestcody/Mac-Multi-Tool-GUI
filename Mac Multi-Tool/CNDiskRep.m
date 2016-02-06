@@ -11,81 +11,67 @@
 @implementation CNDiskRep
 
 @synthesize children=_children;
-@synthesize name=_name;
-@synthesize type=_type;
+@synthesize objects=_objects;
 @synthesize isChild=_isChild;
-@synthesize size=_size;
-@synthesize identifier=_identifier;
+@synthesize isBoot=_isBoot;
 
 
 - (id)init {
     if (self = [super init]) {
         //Set up anything that needs to happen at init.
+        return self;
+    } else {
+        return nil;
     }
-    return self;
 }
 
 - (void) dealloc {
     // Shouldn't ever be called, but here for clarity.
 }
 
-- (id)initWithName:(NSString *)name {
-    if (self = [super init]) {
-        _name = name;
-        return self;
-    } else {
-        return nil;
+- (void)addChild:(id)child {
+    if (_children == nil) {
+        _children = [[NSMutableArray alloc] init];
     }
-}
-- (id)initWithName:(NSString *)name child:(id)child {
-    if (self = [super init]) {
-        [self setName:name];
-        [self addChild:child];
-        return self;
-    } else {
-        return nil;
+    if ([child isKindOfClass:[CNDiskRep class]]) {
+        [child setIsChild:YES];
     }
-}
-- (id)initWithName:(NSString *)name children:(NSMutableArray *)children {
-    if (self = [super init]) {
-        [self setName:name];
-        [self setChildren:children];
-        return self;
-    } else {
-        return nil;
-    }
+    [_children addObject:child];
 }
 
-- (NSString *)getName {
-    return _name;
+- (void)setObject:(id)object forKey:(NSString *)key {
+    if (_objects == nil) {
+        _objects = [[NSMutableDictionary alloc] init];
+    }
+    [_objects setObject:object forKey:key];
+}
+
+- (void)setObjects:(NSMutableDictionary *)objects {
+    _objects = [objects mutableCopy];
 }
 
 - (BOOL)isChild; {
     return _isChild;
 }
 
-- (NSString *)getSize {
-    return _size;
+- (BOOL)isBoot; {
+    return _isBoot;
 }
 
-- (NSString *)getType {
-    return _type;
+- (id)objectForKey:(NSString *)key {
+    if (_objects == nil) {
+        return nil;
+    } else {
+        return [_objects objectForKey:key];
+    }
 }
 
-- (NSString *)getIdentifier {
-    return _identifier;
+- (NSMutableDictionary *)getObjects {
+    return _objects;
 }
 
 - (NSMutableArray *)getChildren {
     return _children;
-}
-
-- (BOOL)hasChildren {
-    if (_children != nil && [_children count] > 0) {
-        return YES;
-    } else {
-        return NO;
-    }
 }
 
 - (unsigned long)numberOfChildren {
@@ -104,11 +90,12 @@
     }
 }
 
-- (void)addChild:(id)child {
-    if (_children == nil) {
-        _children = [[NSMutableArray alloc] init];
+- (BOOL)hasChildren {
+    if (_children != nil && [_children count] > 0) {
+        return YES;
+    } else {
+        return NO;
     }
-    [_children addObject:child];
 }
 
 @end

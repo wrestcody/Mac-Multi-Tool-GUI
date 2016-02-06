@@ -655,7 +655,7 @@
                                             <tableViewGridLines key="gridStyleMask" vertical="YES"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn identifier="Name" editable="NO" width="102.6328125" minWidth="40" maxWidth="1000" id="Jdl-ce-ci9">
+                                                <tableColumn identifier="MediaName" editable="NO" width="102.6328125" minWidth="40" maxWidth="1000" id="Jdl-ce-ci9">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Name">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -682,7 +682,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <accessibility identifier="Value"/>
                                                 </tableColumn>
-                                                <tableColumn identifier="Type" editable="NO" width="109.95703125" minWidth="10" maxWidth="3.4028234663852886e+38" id="RWr-VP-cgC">
+                                                <tableColumn identifier="Content" editable="NO" width="109.95703125" minWidth="10" maxWidth="3.4028234663852886e+38" id="RWr-VP-cgC">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Type">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -695,7 +695,7 @@
                                                     </textFieldCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                 </tableColumn>
-                                                <tableColumn identifier="Identifier" editable="NO" width="155.3359375" minWidth="10" maxWidth="3.4028234663852886e+38" id="mQl-dS-oVq">
+                                                <tableColumn identifier="DeviceIdentifier" editable="NO" width="155.3359375" minWidth="10" maxWidth="3.4028234663852886e+38" id="mQl-dS-oVq">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Identifier">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>

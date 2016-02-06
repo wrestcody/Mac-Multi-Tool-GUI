@@ -131,10 +131,18 @@
         //disk will be a string in the format disk0, disk1, disk2, etc
         NSMutableDictionary *diskPlist = [self getPlistForDisk:disk];
         NSString *diskSize = [self getReadableSizeFromString:[diskPlist objectForKey:@"TotalSize"]];
-        CNDiskRep *diskRep = [[CNDiskRep alloc] initWithName:[diskPlist objectForKey:@"MediaName"]];
+        
+        /*CNDiskRep *diskRep = [[CNDiskRep alloc] initWithName:[diskPlist objectForKey:@"MediaName"]];
         [diskRep setSize:diskSize];
         [diskRep setType:[diskPlist objectForKey:@"Content"]];
-        [diskRep setIdentifier:[NSString stringWithFormat:@"/dev/%@", disk]];
+        [diskRep setIdentifier:[NSString stringWithFormat:@"/dev/%@", disk]];*/
+        
+        CNDiskRep *diskRep = [[CNDiskRep alloc] init];
+        [diskRep setObjects:diskPlist];
+        [diskRep setObject:[diskPlist objectForKey:@"MediaName"] forKey:@"Name"];
+        [diskRep setObject:diskSize forKey:@"Size"];
+        [diskRep setObject:[diskPlist objectForKey:@"DeviceNode"] forKey:@"DeviceIdentifier"];
+        
         
         //Iterate through all disk identifiers (disk0, disk0s1, disk0s2) and
         //create diskreps for each - then add to the children of the parentdisk
@@ -145,19 +153,21 @@
                 NSMutableDictionary *partPlist = [self getPlistForDisk:part];
                 //Create our partition diskrep
                 NSString *partSize = [self getReadableSizeFromString:[partPlist objectForKey:@"TotalSize"]];
-                CNDiskRep *partRep = [[CNDiskRep alloc] initWithName:[partPlist objectForKey:@"VolumeName"]];
+                
+                CNDiskRep *partRep = [[CNDiskRep alloc] init];
+                [partRep setObjects:partPlist];
+                [partRep setObject:[partPlist objectForKey:@"VolumeName"] forKey:@"Name"];
+                [partRep setObject:partSize forKey:@"Size"];
+                
+                
+                /*CNDiskRep *partRep = [[CNDiskRep alloc] initWithName:[partPlist objectForKey:@"VolumeName"]];
                 [partRep setType:[partPlist objectForKey:@"Content"]];
                 [partRep setSize:partSize];
-                [partRep setIdentifier:part];
-                [partRep setIsChild:YES];
+                [partRep setIdentifier:part];*/
+                //[partRep setIsChild:YES];
                 if ([[partPlist objectForKey:@"MountPoint"] isEqualToString:@"/"]) {
                     [partRep setIsBoot:YES];
                     [diskRep setIsBoot:YES];
-                }
-                
-                //add diskreps for things like size, type, etc
-                if ([partPlist objectForKey:@""]) {
-                    
                 }
                 
                 [diskRep addChild:partRep];
@@ -167,6 +177,86 @@
     }
     
     return outlineList;
+}
+
+- (NSMutableArray *)getVolumesViewList {
+    NSMutableArray *volumes = [self getVolumesFromDisks];
+    NSMutableArray *volumesList = [[NSMutableArray alloc] init];
+    
+    for (id vol in volumes) {
+        NSMutableDictionary *volPlist = [self getPlistForDisk:vol];
+        NSString *volSize = [self getReadableSizeFromString:[volPlist objectForKey:@"TotalSize"]];
+        
+        CNDiskRep *volRep = [[CNDiskRep alloc] init];
+        [volRep setObjects:volPlist];
+        [volRep setObject:vol forKey:@"Name"];
+        [volRep setObject:volSize forKey:@"Size"];
+        
+        if ([[volPlist objectForKey:@"MountPoint"] isEqualToString:@"/"]) {
+            [volRep setIsBoot:YES];
+        }
+        
+        [volumesList addObject:volRep];
+    }
+    
+    return volumesList;
+}
+
+- (NSMutableArray *)getDiskViewList:(id)disk {
+    if (disk == nil) {
+        return nil;
+    }
+    
+    //Grab some blank variables
+    NSMutableArray *diskViewList = [[NSMutableArray alloc] init];
+    NSMutableDictionary *diskPlist;
+    CNDiskRep *diskRep = [[CNDiskRep alloc] init];
+    
+    
+    if ([disk isKindOfClass:[NSString class]]) {
+        diskPlist = [self getPlistForDisk:disk];
+        [diskRep setObjects:diskPlist];
+        [diskViewList addObject:diskRep];
+    } else if ([disk isKindOfClass:[CNDiskRep class]]) {
+        
+        NSLog(@"Disk -\nDN: %@\nDI: %@\nName: %@", [disk objectForKey:@"DeviceNode"], [disk objectForKey:@"DeviceIdentifier"], [disk objectForKey:@"Name"]);
+        
+        if ([disk objectForKey:@"DeviceNode"]) {
+            diskPlist = [self getPlistForDisk:[disk objectForKey:@"DeviceNode"]];
+            [diskRep setObjects:diskPlist];
+        } else if ([disk objectForKey:@"DeviceIdentifier"]) {
+            diskPlist = [self getPlistForDisk:[disk objectForKey:@"DeviceIdentifier"]];
+            [diskRep setObjects:diskPlist];
+        } else if ([disk objectForKey:@"Name"]) {
+            diskPlist = [self getPlistForDisk:[disk objectForKey:@"Name"]];
+            [diskRep setObjects:diskPlist];
+        } else {
+            return nil;
+        }
+        
+        //Set up size and isBoot
+        NSString *diskSize = [self getReadableSizeFromString:[diskPlist objectForKey:@"TotalSize"]];
+        [diskPlist setObject:diskSize forKey:@"Size"];
+        
+        //Make sure we mark isBoot if the boot drive/partition
+        NSString *bootDeviceNode = [self getBootDeviceNode];
+        if ([bootDeviceNode containsString:[diskPlist objectForKey:@"DeviceNode"]]) {
+            [diskRep setIsBoot:YES];
+        }
+        
+        
+        [diskRep setObjects:diskPlist];
+        [diskViewList addObject:diskRep];
+    }
+    
+    NSLog(@"diskViewList:\n%@", diskViewList);
+    
+    return diskViewList;
+}
+
+- (NSString *)getBootDeviceNode {
+    NSMutableDictionary *bootVolume = [self getPlistForDisk:@"/"];
+    return [bootVolume objectForKey:@"DeviceNode"];
 }
 
 - (NSString *)getReadableSizeFromString:(NSString *)string {
