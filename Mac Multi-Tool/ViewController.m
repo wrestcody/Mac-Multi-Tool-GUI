@@ -27,6 +27,8 @@
     [super viewDidLoad];
     _disks = [[CNDiskList sharedList] getOutlineViewList];
     //_disks = [[CNDiskList sharedList] getVolumesViewList];
+    
+    NSLog(@"Disk: %@", [[_disks firstObject] getObjects]);
     // Do any additional setup after loading the view.
 }
 

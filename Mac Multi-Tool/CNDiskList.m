@@ -239,8 +239,7 @@
         [diskPlist setObject:diskSize forKey:@"Size"];
         
         //Make sure we mark isBoot if the boot drive/partition
-        NSString *bootDeviceNode = [self getBootDeviceNode];
-        if ([bootDeviceNode containsString:[diskPlist objectForKey:@"DeviceNode"]]) {
+        if ([self isBootDisk:diskRep]) {
             [diskRep setIsBoot:YES];
         }
         
@@ -257,6 +256,36 @@
 - (NSString *)getBootDeviceNode {
     NSMutableDictionary *bootVolume = [self getPlistForDisk:@"/"];
     return [bootVolume objectForKey:@"DeviceNode"];
+}
+
+- (BOOL)isBootDisk:(id)disk {
+    
+    //Create a blank dictionary
+    NSMutableDictionary *diskPlist = nil;
+    
+    //if we are passed a valid disk name or rep, get plist
+    if ([disk isKindOfClass:[NSString class]]) {
+        diskPlist = [self getPlistForDisk:disk];
+    } else if ([disk isKindOfClass:[CNDiskRep class]]) {
+        if ([disk objectForKey:@"DeviceNode"]) {
+            diskPlist = [self getPlistForDisk:[disk objectForKey:@"DeviceNode"]];
+        } else if ([disk objectForKey:@"DeviceIdentifier"]) {
+            diskPlist = [self getPlistForDisk:[disk objectForKey:@"DeviceIdentifier"]];
+        } else if ([disk objectForKey:@"Name"]) {
+            diskPlist = [self getPlistForDisk:[disk objectForKey:@"Name"]];
+        }
+    }
+    
+    //If diskPlist was initialized, find out if boot
+    if (diskPlist != nil) {
+        // We initialized :)
+        if ([[self getBootDeviceNode] containsString:[diskPlist objectForKey:@"DeviceNode"]]) {
+            // if boot device node contains our device node - we're on the boot disk/partition
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 - (NSString *)getReadableSizeFromString:(NSString *)string {
