@@ -21,6 +21,9 @@
 		45C309021C66B5A800235F05 /* DiskUtilityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C309011C66B5A800235F05 /* DiskUtilityController.m */; };
 		45C3090C1C66DF5600235F05 /* CNPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C3090A1C66DF5600235F05 /* CNPopoverController.m */; };
 		45C3090D1C66DF5600235F05 /* CNPopoverController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 45C3090B1C66DF5600235F05 /* CNPopoverController.xib */; };
+		45F34A8F1C670E5D00981A80 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 45F34A8B1C670E5D00981A80 /* README.md */; };
+		45F34A901C670E5D00981A80 /* STPrivilegedTask.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 45F34A8C1C670E5D00981A80 /* STPrivilegedTask.podspec */; };
+		45F34A911C670E5D00981A80 /* STPrivilegedTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 45F34A8E1C670E5D00981A80 /* STPrivilegedTask.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +70,10 @@
 		45C309091C66DF5600235F05 /* CNPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNPopoverController.h; sourceTree = "<group>"; };
 		45C3090A1C66DF5600235F05 /* CNPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNPopoverController.m; sourceTree = "<group>"; };
 		45C3090B1C66DF5600235F05 /* CNPopoverController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CNPopoverController.xib; sourceTree = "<group>"; };
+		45F34A8B1C670E5D00981A80 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = "../../../Helpful Stuff/STPrivilegedTask-master/README.md"; sourceTree = "<group>"; };
+		45F34A8C1C670E5D00981A80 /* STPrivilegedTask.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = STPrivilegedTask.podspec; path = "../../../Helpful Stuff/STPrivilegedTask-master/STPrivilegedTask.podspec"; sourceTree = "<group>"; };
+		45F34A8D1C670E5D00981A80 /* STPrivilegedTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STPrivilegedTask.h; path = "../../../Helpful Stuff/STPrivilegedTask-master/STPrivilegedTask.h"; sourceTree = "<group>"; };
+		45F34A8E1C670E5D00981A80 /* STPrivilegedTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = STPrivilegedTask.m; path = "../../../Helpful Stuff/STPrivilegedTask-master/STPrivilegedTask.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +132,7 @@
 		4587EDB91C64185B0064A816 /* Mac Multi-Tool */ = {
 			isa = PBXGroup;
 			children = (
+				45F34A8A1C670E1E00981A80 /* STPriviledgedTask */,
 				45C309081C66DF2E00235F05 /* CNPopoverController */,
 				45C309031C66B5B000235F05 /* Disk Utility */,
 				453CE0D61C66937D00C044D0 /* Images */,
@@ -188,6 +196,17 @@
 				45C3090B1C66DF5600235F05 /* CNPopoverController.xib */,
 			);
 			name = CNPopoverController;
+			sourceTree = "<group>";
+		};
+		45F34A8A1C670E1E00981A80 /* STPriviledgedTask */ = {
+			isa = PBXGroup;
+			children = (
+				45F34A8B1C670E5D00981A80 /* README.md */,
+				45F34A8C1C670E5D00981A80 /* STPrivilegedTask.podspec */,
+				45F34A8D1C670E5D00981A80 /* STPrivilegedTask.h */,
+				45F34A8E1C670E5D00981A80 /* STPrivilegedTask.m */,
+			);
+			name = STPriviledgedTask;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -296,6 +315,7 @@
 				45C308FF1C66B53000235F05 /* DiskUtilityController.xib in Resources */,
 				45C3090D1C66DF5600235F05 /* CNPopoverController.xib in Resources */,
 				4587EDC41C64185B0064A816 /* Assets.xcassets in Resources */,
+				45F34A901C670E5D00981A80 /* STPrivilegedTask.podspec in Resources */,
 				453CE0E21C66B03500C044D0 /* MainMenu.xib in Resources */,
 				453CE0D81C66938800C044D0 /* disk_utility.png in Resources */,
 			);
@@ -328,7 +348,9 @@
 				45C3090C1C66DF5600235F05 /* CNPopoverController.m in Sources */,
 				45BDE8DC1C658DC1003F31B4 /* CNDiskRep.m in Sources */,
 				4587EDEC1C642C380064A816 /* CNOutlineView.m in Sources */,
+				45F34A8F1C670E5D00981A80 /* README.md in Sources */,
 				4587EDBC1C64185B0064A816 /* AppDelegate.m in Sources */,
+				45F34A911C670E5D00981A80 /* STPrivilegedTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

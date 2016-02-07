@@ -19,10 +19,6 @@
 - (void)mouseDown:(NSEvent *)theEvent {
     [super mouseDown:theEvent];
     
-    if (theEvent.clickCount < 2) {
-        return;
-    }
-    
     // Get the row on which the user clicked
     NSPoint localPoint = [self convertPoint:theEvent.locationInWindow
                                    fromView:nil];
@@ -34,17 +30,13 @@
         return;
     }
     
-    /*if (theEvent.clickCount < 2) {
-        
-        NSRect outline = [self frameOfOutlineCellAtRow:row];
-        
-        //NSDictionary *point = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:outline.x], @"X",[NSNumber numberWithFloat:outline.y], @"Y", nil];
-        //[[NSNotificationCenter defaultCenter] postNotificationName:@"OutlineViewSelected" object:self userInfo:[NSValue valueWithRect:outline]];
-        return;
-    }*/
-    
-    
     NSRect outline = [self frameOfCellAtColumn:col row:row];
+    
+    if (theEvent.clickCount < 2) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"OutlineViewSelected" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithRect:outline], @"Rect", [self itemAtRow:[self selectedRow]], @"Item", nil]];
+        return;
+    }
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"OutlineViewDoubleClick" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithRect:outline], @"Rect", [self itemAtRow:[self selectedRow]], @"Item", nil]];
     //NSLog(@"Title: %@", cell.stringValue);
 }
