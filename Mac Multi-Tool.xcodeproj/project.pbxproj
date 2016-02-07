@@ -7,16 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		453CE0D81C66938800C044D0 /* disk_utility.png in Resources */ = {isa = PBXBuildFile; fileRef = 453CE0D71C66938800C044D0 /* disk_utility.png */; };
+		453CE0E21C66B03500C044D0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 453CE0E11C66B03500C044D0 /* MainMenu.xib */; };
 		4587EDBC1C64185B0064A816 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4587EDBB1C64185B0064A816 /* AppDelegate.m */; };
 		4587EDBF1C64185B0064A816 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4587EDBE1C64185B0064A816 /* main.m */; };
-		4587EDC21C64185B0064A816 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4587EDC11C64185B0064A816 /* ViewController.m */; };
 		4587EDC41C64185B0064A816 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4587EDC31C64185B0064A816 /* Assets.xcassets */; };
-		4587EDC71C64185B0064A816 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4587EDC51C64185B0064A816 /* Main.storyboard */; };
 		4587EDD21C64185B0064A816 /* Mac_Multi_ToolTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4587EDD11C64185B0064A816 /* Mac_Multi_ToolTests.m */; };
 		4587EDDD1C64185B0064A816 /* Mac_Multi_ToolUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4587EDDC1C64185B0064A816 /* Mac_Multi_ToolUITests.m */; };
 		4587EDEC1C642C380064A816 /* CNOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4587EDEB1C642C380064A816 /* CNOutlineView.m */; };
 		45BDE8D91C657AD7003F31B4 /* CNDiskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 45BDE8D81C657AD7003F31B4 /* CNDiskList.m */; };
 		45BDE8DC1C658DC1003F31B4 /* CNDiskRep.m in Sources */ = {isa = PBXBuildFile; fileRef = 45BDE8DB1C658DC1003F31B4 /* CNDiskRep.m */; };
+		45C308FF1C66B53000235F05 /* DiskUtilityController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 45C308FE1C66B53000235F05 /* DiskUtilityController.xib */; };
+		45C309021C66B5A800235F05 /* DiskUtilityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C309011C66B5A800235F05 /* DiskUtilityController.m */; };
+		45C3090C1C66DF5600235F05 /* CNPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C3090A1C66DF5600235F05 /* CNPopoverController.m */; };
+		45C3090D1C66DF5600235F05 /* CNPopoverController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 45C3090B1C66DF5600235F05 /* CNPopoverController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,14 +41,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		453CE0D71C66938800C044D0 /* disk_utility.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = disk_utility.png; path = Images/disk_utility.png; sourceTree = "<group>"; };
+		453CE0E11C66B03500C044D0 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		4587EDB71C64185B0064A816 /* Mac Multi-Tool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mac Multi-Tool.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4587EDBA1C64185B0064A816 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4587EDBB1C64185B0064A816 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		4587EDBE1C64185B0064A816 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		4587EDC01C64185B0064A816 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		4587EDC11C64185B0064A816 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		4587EDC31C64185B0064A816 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		4587EDC61C64185B0064A816 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4587EDC81C64185B0064A816 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4587EDCD1C64185B0064A816 /* Mac Multi-ToolTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Mac Multi-ToolTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4587EDD11C64185B0064A816 /* Mac_Multi_ToolTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Mac_Multi_ToolTests.m; sourceTree = "<group>"; };
@@ -58,6 +61,12 @@
 		45BDE8D81C657AD7003F31B4 /* CNDiskList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNDiskList.m; sourceTree = "<group>"; };
 		45BDE8DA1C658DC1003F31B4 /* CNDiskRep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNDiskRep.h; sourceTree = "<group>"; };
 		45BDE8DB1C658DC1003F31B4 /* CNDiskRep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNDiskRep.m; sourceTree = "<group>"; };
+		45C308FE1C66B53000235F05 /* DiskUtilityController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiskUtilityController.xib; sourceTree = "<group>"; };
+		45C309001C66B5A800235F05 /* DiskUtilityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskUtilityController.h; sourceTree = "<group>"; };
+		45C309011C66B5A800235F05 /* DiskUtilityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiskUtilityController.m; sourceTree = "<group>"; };
+		45C309091C66DF5600235F05 /* CNPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNPopoverController.h; sourceTree = "<group>"; };
+		45C3090A1C66DF5600235F05 /* CNPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNPopoverController.m; sourceTree = "<group>"; };
+		45C3090B1C66DF5600235F05 /* CNPopoverController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CNPopoverController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +94,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		453CE0D61C66937D00C044D0 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				453CE0D71C66938800C044D0 /* disk_utility.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
 		4587EDAE1C64185B0064A816 = {
 			isa = PBXGroup;
 			children = (
@@ -108,16 +125,17 @@
 		4587EDB91C64185B0064A816 /* Mac Multi-Tool */ = {
 			isa = PBXGroup;
 			children = (
+				45C309081C66DF2E00235F05 /* CNPopoverController */,
+				45C309031C66B5B000235F05 /* Disk Utility */,
+				453CE0D61C66937D00C044D0 /* Images */,
 				4587EDBA1C64185B0064A816 /* AppDelegate.h */,
 				4587EDBB1C64185B0064A816 /* AppDelegate.m */,
-				4587EDC01C64185B0064A816 /* ViewController.h */,
-				4587EDC11C64185B0064A816 /* ViewController.m */,
 				45BDE8D71C657AD7003F31B4 /* CNDiskList.h */,
 				45BDE8D81C657AD7003F31B4 /* CNDiskList.m */,
 				45BDE8DA1C658DC1003F31B4 /* CNDiskRep.h */,
 				45BDE8DB1C658DC1003F31B4 /* CNDiskRep.m */,
 				4587EDC31C64185B0064A816 /* Assets.xcassets */,
-				4587EDC51C64185B0064A816 /* Main.storyboard */,
+				453CE0E11C66B03500C044D0 /* MainMenu.xib */,
 				4587EDEA1C642C380064A816 /* CNOutlineView.h */,
 				4587EDEB1C642C380064A816 /* CNOutlineView.m */,
 				4587EDC81C64185B0064A816 /* Info.plist */,
@@ -150,6 +168,26 @@
 				4587EDDE1C64185B0064A816 /* Info.plist */,
 			);
 			path = "Mac Multi-ToolUITests";
+			sourceTree = "<group>";
+		};
+		45C309031C66B5B000235F05 /* Disk Utility */ = {
+			isa = PBXGroup;
+			children = (
+				45C309001C66B5A800235F05 /* DiskUtilityController.h */,
+				45C309011C66B5A800235F05 /* DiskUtilityController.m */,
+				45C308FE1C66B53000235F05 /* DiskUtilityController.xib */,
+			);
+			name = "Disk Utility";
+			sourceTree = "<group>";
+		};
+		45C309081C66DF2E00235F05 /* CNPopoverController */ = {
+			isa = PBXGroup;
+			children = (
+				45C309091C66DF5600235F05 /* CNPopoverController.h */,
+				45C3090A1C66DF5600235F05 /* CNPopoverController.m */,
+				45C3090B1C66DF5600235F05 /* CNPopoverController.xib */,
+			);
+			name = CNPopoverController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -255,8 +293,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45C308FF1C66B53000235F05 /* DiskUtilityController.xib in Resources */,
+				45C3090D1C66DF5600235F05 /* CNPopoverController.xib in Resources */,
 				4587EDC41C64185B0064A816 /* Assets.xcassets in Resources */,
-				4587EDC71C64185B0064A816 /* Main.storyboard in Resources */,
+				453CE0E21C66B03500C044D0 /* MainMenu.xib in Resources */,
+				453CE0D81C66938800C044D0 /* disk_utility.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,9 +322,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4587EDC21C64185B0064A816 /* ViewController.m in Sources */,
 				45BDE8D91C657AD7003F31B4 /* CNDiskList.m in Sources */,
 				4587EDBF1C64185B0064A816 /* main.m in Sources */,
+				45C309021C66B5A800235F05 /* DiskUtilityController.m in Sources */,
+				45C3090C1C66DF5600235F05 /* CNPopoverController.m in Sources */,
 				45BDE8DC1C658DC1003F31B4 /* CNDiskRep.m in Sources */,
 				4587EDEC1C642C380064A816 /* CNOutlineView.m in Sources */,
 				4587EDBC1C64185B0064A816 /* AppDelegate.m in Sources */,
@@ -320,17 +362,6 @@
 			targetProxy = 4587EDD91C64185B0064A816 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		4587EDC51C64185B0064A816 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4587EDC61C64185B0064A816 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		4587EDDF1C64185B0064A816 /* Debug */ = {
@@ -419,7 +450,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "Mac Multi-Tool/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "CorpNewt.Mac-Multi-Tool";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -432,7 +463,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "Mac Multi-Tool/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "CorpNewt.Mac-Multi-Tool";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

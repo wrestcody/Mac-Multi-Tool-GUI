@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CNDiskRep.h"
 
 @interface CNDiskList : NSObject
 
@@ -18,11 +19,14 @@
 - (NSMutableDictionary *)getPlistForDisk:(NSString *)disk;
 - (NSMutableDictionary *)diskUtilWithArguments:(NSArray *)args;
 
+- (NSString *)getStringForDisk:(CNDiskRep *)disk;
+
 - (NSMutableArray *)getAllDiskIdentifiers;
 - (NSMutableArray *)getWholeDiskIdentifiers;
 - (NSMutableArray *)getVolumesFromDisks;
 - (NSMutableArray *)getOutlineViewList;
 - (NSMutableArray *)getVolumesViewList;
+- (NSMutableArray *)getAllDisksAndPartitionsList;
 - (NSMutableArray *)getDiskViewList:(id)disk;
 - (NSString *)getBootDeviceNode;
 

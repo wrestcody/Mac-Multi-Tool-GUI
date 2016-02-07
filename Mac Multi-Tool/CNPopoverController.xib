@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9532"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="CNPopoverController">
+            <connections>
+                <outlet property="info" destination="BdZ-UF-XxU" id="eLy-Q9-oQl"/>
+                <outlet property="titleField" destination="g7g-5l-UxF" id="Cvw-nl-mJF"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="682" height="398"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <scrollView fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" scrollerKnobStyle="dark" translatesAutoresizingMaskIntoConstraints="NO" id="7I6-Y5-c0D">
+                    <rect key="frame" x="20" y="20" width="642" height="325"/>
+                    <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" id="jHQ-xS-Fs5">
+                        <rect key="frame" x="0.0" y="0.0" width="642" height="325"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView ambiguous="YES" editable="NO" drawsBackground="NO" importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="BdZ-UF-XxU">
+                                <rect key="frame" x="0.0" y="0.0" width="642" height="325"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="0.10000000000000001" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <size key="minSize" width="642" height="325"/>
+                                <size key="maxSize" width="642" height="10000000"/>
+                                <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <size key="minSize" width="642" height="325"/>
+                                <size key="maxSize" width="642" height="10000000"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" name="quaternaryLabelColor" catalog="System" colorSpace="catalog"/>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="5lN-bz-4kn">
+                        <rect key="frame" x="0.0" y="310" width="627" height="15"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="Asf-02-w15">
+                        <rect key="frame" x="627" y="0.0" width="15" height="310"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g7g-5l-UxF">
+                    <rect key="frame" x="18" y="361" width="646" height="17"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Name:" id="q5U-SE-YXg">
+                        <font key="font" metaFont="systemBold" size="14"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="0.84999999999999998" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <point key="canvasLocation" x="413" y="368"/>
+        </customView>
+    </objects>
+</document>

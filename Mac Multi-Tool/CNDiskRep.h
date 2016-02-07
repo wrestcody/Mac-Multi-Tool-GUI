@@ -18,6 +18,7 @@
 - (void)addChild:(id)child;
 - (void)setObject:(id)object forKey:(NSString *)key;
 - (void)setObjects:(NSMutableDictionary *)objects;
+- (void)removeObjectWithKey:(NSString *)key;
 
 - (BOOL)isChild;
 - (BOOL)isBoot;

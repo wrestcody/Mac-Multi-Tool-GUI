@@ -19,7 +19,6 @@
 - (void)mouseDown:(NSEvent *)theEvent {
     [super mouseDown:theEvent];
     
-    // Only take effect for double clicks; remove to allow for single clicks
     if (theEvent.clickCount < 2) {
         return;
     }
@@ -28,22 +27,25 @@
     NSPoint localPoint = [self convertPoint:theEvent.locationInWindow
                                    fromView:nil];
     NSInteger row = [self rowAtPoint:localPoint];
-    //NSInteger col = [self columnAtPoint:localPoint];
+    NSInteger col = [self columnAtPoint:localPoint];
     
     // If the user didn't click on a row, we're done
     if (row < 0) {
         return;
     }
     
-    // Get the view clicked on
-    //NSCell *cell = [self preparedCellAtColumn:col row:row ];
-    
-    
-    // If the field can be edited, pop the editor into edit mode
-    /*if (view.textField.isEditable) {
-        [[view window] makeFirstResponder:view.textField];
+    /*if (theEvent.clickCount < 2) {
+        
+        NSRect outline = [self frameOfOutlineCellAtRow:row];
+        
+        //NSDictionary *point = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:outline.x], @"X",[NSNumber numberWithFloat:outline.y], @"Y", nil];
+        //[[NSNotificationCenter defaultCenter] postNotificationName:@"OutlineViewSelected" object:self userInfo:[NSValue valueWithRect:outline]];
+        return;
     }*/
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"OutlineViewDoubleClick" object:self userInfo:[self itemAtRow:row]];
+    
+    
+    NSRect outline = [self frameOfCellAtColumn:col row:row];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"OutlineViewDoubleClick" object:self userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSValue valueWithRect:outline], @"Rect", [self itemAtRow:[self selectedRow]], @"Item", nil]];
     //NSLog(@"Title: %@", cell.stringValue);
 }
 

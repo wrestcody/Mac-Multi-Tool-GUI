@@ -50,6 +50,10 @@
     _objects = [objects mutableCopy];
 }
 
+- (void)removeObjectWithKey:(NSString *)key {
+    [_objects removeObjectForKey:key];
+}
+
 - (BOOL)isChild; {
     return _isChild;
 }
