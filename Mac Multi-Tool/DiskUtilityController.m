@@ -8,6 +8,7 @@
 
 #import "DiskUtilityController.h"
 #import "CNPopoverController.h"
+#import "AAPLImageAndTextCell.h"
 
 @interface DiskUtilityController () <NSPopoverDelegate>
 
@@ -17,6 +18,15 @@
 @property (strong) NSWindow *detachedWindow;
 
 @end
+
+#pragma mark -
+
+#define COLUMNID_NAME               @"Name"
+#define IMAGE_PAD                   6
+
+static NSSize imageSize;
+
+#pragma mark -
 
 @implementation DiskUtilityController
 
@@ -32,6 +42,10 @@
     [super viewDidLoad];
     // Do view setup here.
     
+    //Set our image size here
+    imageSize = NSMakeSize(16, 16);
+    
+    
     [_diskView setDataSource:(id<NSOutlineViewDataSource>)self];
     [_diskView setDelegate:(id<NSOutlineViewDelegate>)self];
     
@@ -40,10 +54,10 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(outlineViewSelected:) name:@"OutlineViewSelected" object:nil];
     
-    //_disks = [[CNDiskList sharedList] getOutlineViewList];
-    _disks = [[CNDiskList sharedList] getAllDisksAndPartitionsList];
+    _disks = [[CNDiskList sharedList] getOutlineViewList];
+    //_disks = [[CNDiskList sharedList] getAllDisksAndPartitionsList];
     
-    NSLog(@"%@", [[[[_disks objectAtIndex:1] getChildren] objectAtIndex:2] getObjects]);
+    NSLog(@"%@", [[[[_disks objectAtIndex:0] getChildren] objectAtIndex:1] getObjects]);
     
     
     
@@ -199,7 +213,7 @@
         }
         
         //Set text color to blue if boot drive/partition
-        if ([item isBoot] && [[tableColumn identifier] isEqualToString:@"Name"]) {
+        if ([item isBoot] && [[tableColumn identifier] isEqualToString:COLUMNID_NAME]) {
             color = [NSColor blueColor];
         }
         
@@ -223,6 +237,83 @@
         return [[NSAttributedString alloc] initWithString:[item objectForKey:[tableColumn identifier]] attributes:attrs];
     }
     
+    return nil;
+}
+
+- (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(NSCell *)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item {
+    if ((tableColumn == nil) || [[tableColumn identifier] isEqualToString:COLUMNID_NAME]) {
+        // Set up some images - *try* to determine appropriate icon per disk type
+        NSString *busProtocol = [[item getObjects] objectForKey:@"BusProtocol"];
+        NSString *opticalDrive = [[item getObjects] objectForKey:@"OpticalDeviceType"];
+        NSString *mountPoint = [[item getObjects] objectForKey:@"MountPoint"];
+        BOOL internal    = [[[item getObjects] objectForKey:@"Internal"] boolValue];
+        NSImage *diskImageOrig;
+        
+        //Set up defaults if either string is nil
+        if (busProtocol == nil) {
+            busProtocol = @"SATA";
+        }
+        
+        if (opticalDrive == nil) {
+            //Find out what disk to use
+            if ([busProtocol isEqualToString:@"SATA"] && internal) {
+                diskImageOrig = [NSImage imageNamed:@"SidebarInternalDisk"];
+            } else if ([busProtocol isEqualToString:@"SATA"] && !internal) {
+                diskImageOrig = [NSImage imageNamed:@"SidebarExternalDisk"];
+            } else if ([busProtocol isEqualToString:@"USB"] && !internal) {
+                diskImageOrig = [NSImage imageNamed:@"SidebarRemovableDisk"];
+            } else if ([busProtocol isEqualToString:@"SATA"] && internal) {
+                diskImageOrig = [NSImage imageNamed:@"SidebarInternalDisk"];
+            } else if ([busProtocol isEqualToString:@"Disk Image"]) {
+                diskImageOrig = [NSImage imageNamed:@"SidebarRemovableDisk"];
+            } else {
+                diskImageOrig = [NSImage imageNamed:@"SidebarInternalDisk"];
+            }
+        } else {
+            diskImageOrig = [NSImage imageNamed:@"SidebarOpticalDisk"];
+        }
+        
+        //NSImage *diskImageOrig = [NSImage imageNamed:@"SidebarInternalDisk"];
+        NSImage *diskImage = [self imageResize:diskImageOrig newSize:imageSize];
+        // We know that the cell at this column is our image and text cell, so grab it
+        AAPLImageAndTextCell *imageAndTextCell = (AAPLImageAndTextCell *)cell;
+        // Set the image here since the value returned from outlineView:objectValueForTableColumn:... didn't specify the image part...
+        imageAndTextCell.myImage = diskImage;
+        if ([item isChild]) {
+            if ([mountPoint isEqualToString:@""]) {
+                imageAndTextCell.opacity = .5;
+            } else {
+                imageAndTextCell.opacity = .8;
+            }
+        } else {
+            imageAndTextCell.opacity = 1;
+        }
+    }
+    // For all the other columns, we don't do anything.
+}
+
+- (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
+    return imageSize.height + IMAGE_PAD;
+}
+
+#pragma mark - Resize NSImage
+
+- (NSImage *)imageResize:(NSImage*)anImage newSize:(NSSize)newSize {
+    NSImage *sourceImage = anImage;
+    //[sourceImage setScalesWhenResized:YES];
+    
+    // Report an error if the source isn't a valid image
+    if (![sourceImage isValid]){
+        NSLog(@"Invalid Image");
+    } else {
+        NSImage *smallImage = [[NSImage alloc] initWithSize: newSize];
+        [smallImage lockFocus];
+        [sourceImage setSize: newSize];
+        [[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
+        [sourceImage drawAtPoint:NSZeroPoint fromRect:CGRectMake(0, 0, newSize.width, newSize.height) operation:NSCompositeCopy fraction:1.0];
+        [smallImage unlockFocus];
+        return smallImage;
+    }
     return nil;
 }
 

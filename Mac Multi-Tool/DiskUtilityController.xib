@@ -20,24 +20,24 @@
                 <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="20" horizontalPageScroll="10" verticalLineScroll="20" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O0E-tx-uMf">
                     <rect key="frame" x="20" y="61" width="250" height="469"/>
                     <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="cAc-sB-y7d">
-                        <rect key="frame" x="1.5" y="23" width="248" height="430"/>
+                        <rect key="frame" x="1" y="0.0" width="248" height="468"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="em1-Pu-8cY" viewBased="YES" indentationPerLevel="16" outlineTableColumn="hMN-kZ-rk3" id="mKm-he-d4b" customClass="CNOutlineView">
-                                <rect key="frame" x="0.0" y="0.0" width="249" height="430"/>
+                                <rect key="frame" x="0.0" y="0.0" width="248" height="445"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="2" height="3"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <tableViewGridLines key="gridStyleMask" vertical="YES"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
-                                    <tableColumn identifier="Name" editable="NO" width="246.234375" minWidth="40" maxWidth="1000" id="hMN-kZ-rk3">
+                                    <tableColumn identifier="Name" editable="NO" width="246" minWidth="40" maxWidth="1000" id="hMN-kZ-rk3">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Name">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                         </tableHeaderCell>
-                                        <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="Ew9-Bm-tQS">
+                                        <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="Ew9-Bm-tQS" customClass="AAPLImageAndTextCell">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -49,16 +49,16 @@
                         </subviews>
                         <nil key="backgroundColor"/>
                     </clipView>
-                    <scroller key="horizontalScroller" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="N1M-vh-1ke">
-                        <rect key="frame" x="1" y="453" width="248" height="15"/>
+                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="N1M-vh-1ke">
+                        <rect key="frame" x="-7" y="8" width="0.0" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="hed-vV-OYf">
-                        <rect key="frame" x="224" y="17" width="15" height="102"/>
+                        <rect key="frame" x="-14" y="15" width="15" height="0.0"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <tableHeaderView key="headerView" id="em1-Pu-8cY">
-                        <rect key="frame" x="0.0" y="0.0" width="249" height="23"/>
+                        <rect key="frame" x="0.0" y="0.0" width="248" height="23"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </tableHeaderView>
                 </scrollView>

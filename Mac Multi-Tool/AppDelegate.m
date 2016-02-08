@@ -155,10 +155,6 @@
         windowRect.size.height = currentViewRect.size.height + tbHeight + tiHeight;
         windowRect.size.width = currentViewRect.size.width;
         
-        NSLog(@"Window H: %f W: %f", windowRect.size.height, windowRect.size.width);
-        NSLog(@"Frame H: %f W: %f", currentViewRect.size.height, currentViewRect.size.width);
-        NSLog(@"Titlebar H: %f", tbHeight);
-        
         self.window.title = viewInfoDict[@"title"];
         [self.window setContentView:newView];
         [self.window setFrame:windowRect display:YES animate:shouldAnimate];
