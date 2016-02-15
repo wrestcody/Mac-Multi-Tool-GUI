@@ -18,16 +18,21 @@
 		455590CA1C683A060099B4F4 /* SidebarInternalDisk.icns in Resources */ = {isa = PBXBuildFile; fileRef = 455590C51C683A060099B4F4 /* SidebarInternalDisk.icns */; };
 		455590CB1C683A060099B4F4 /* SidebarOpticalDisk.icns in Resources */ = {isa = PBXBuildFile; fileRef = 455590C61C683A060099B4F4 /* SidebarOpticalDisk.icns */; };
 		455590CC1C683A060099B4F4 /* SidebarRemovableDisk.icns in Resources */ = {isa = PBXBuildFile; fileRef = 455590C71C683A060099B4F4 /* SidebarRemovableDisk.icns */; };
+		455DA3D51C70526A0002D061 /* DiskUtilityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 455DA3D01C70526A0002D061 /* DiskUtilityController.m */; };
+		455DA3D61C70526A0002D061 /* Arbitration.m in Sources */ = {isa = PBXBuildFile; fileRef = 455DA3D21C70526A0002D061 /* Arbitration.m */; };
+		455DA3D71C70526A0002D061 /* Disk.m in Sources */ = {isa = PBXBuildFile; fileRef = 455DA3D41C70526A0002D061 /* Disk.m */; };
 		4587EDBC1C64185B0064A816 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4587EDBB1C64185B0064A816 /* AppDelegate.m */; };
 		4587EDBF1C64185B0064A816 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4587EDBE1C64185B0064A816 /* main.m */; };
 		4587EDC41C64185B0064A816 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4587EDC31C64185B0064A816 /* Assets.xcassets */; };
 		4587EDD21C64185B0064A816 /* Mac_Multi_ToolTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4587EDD11C64185B0064A816 /* Mac_Multi_ToolTests.m */; };
 		4587EDDD1C64185B0064A816 /* Mac_Multi_ToolUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4587EDDC1C64185B0064A816 /* Mac_Multi_ToolUITests.m */; };
 		4587EDEC1C642C380064A816 /* CNOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4587EDEB1C642C380064A816 /* CNOutlineView.m */; };
+		45B611551C709B5A0031F42F /* ToolbarItem Eject.png in Resources */ = {isa = PBXBuildFile; fileRef = 45B611521C709B5A0031F42F /* ToolbarItem Eject.png */; };
+		45B611561C709B5A0031F42F /* ToolbarItem Info.png in Resources */ = {isa = PBXBuildFile; fileRef = 45B611531C709B5A0031F42F /* ToolbarItem Info.png */; };
+		45B611571C709B5A0031F42F /* ToolbarItem Mount.png in Resources */ = {isa = PBXBuildFile; fileRef = 45B611541C709B5A0031F42F /* ToolbarItem Mount.png */; };
 		45BDE8D91C657AD7003F31B4 /* CNDiskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 45BDE8D81C657AD7003F31B4 /* CNDiskList.m */; };
 		45BDE8DC1C658DC1003F31B4 /* CNDiskRep.m in Sources */ = {isa = PBXBuildFile; fileRef = 45BDE8DB1C658DC1003F31B4 /* CNDiskRep.m */; };
 		45C308FF1C66B53000235F05 /* DiskUtilityController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 45C308FE1C66B53000235F05 /* DiskUtilityController.xib */; };
-		45C309021C66B5A800235F05 /* DiskUtilityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C309011C66B5A800235F05 /* DiskUtilityController.m */; };
 		45C3090C1C66DF5600235F05 /* CNPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 45C3090A1C66DF5600235F05 /* CNPopoverController.m */; };
 		45C3090D1C66DF5600235F05 /* CNPopoverController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 45C3090B1C66DF5600235F05 /* CNPopoverController.xib */; };
 		45F34A941C670EE400981A80 /* CNDiskUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 45F34A931C670EE400981A80 /* CNDiskUtilities.m */; };
@@ -64,6 +69,12 @@
 		455590C51C683A060099B4F4 /* SidebarInternalDisk.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = SidebarInternalDisk.icns; path = Images/SidebarInternalDisk.icns; sourceTree = "<group>"; };
 		455590C61C683A060099B4F4 /* SidebarOpticalDisk.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = SidebarOpticalDisk.icns; path = Images/SidebarOpticalDisk.icns; sourceTree = "<group>"; };
 		455590C71C683A060099B4F4 /* SidebarRemovableDisk.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = SidebarRemovableDisk.icns; path = Images/SidebarRemovableDisk.icns; sourceTree = "<group>"; };
+		455DA3CF1C70526A0002D061 /* DiskUtilityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskUtilityController.h; sourceTree = "<group>"; };
+		455DA3D01C70526A0002D061 /* DiskUtilityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiskUtilityController.m; sourceTree = "<group>"; };
+		455DA3D11C70526A0002D061 /* Arbitration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Arbitration.h; sourceTree = "<group>"; };
+		455DA3D21C70526A0002D061 /* Arbitration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Arbitration.m; sourceTree = "<group>"; };
+		455DA3D31C70526A0002D061 /* Disk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Disk.h; sourceTree = "<group>"; };
+		455DA3D41C70526A0002D061 /* Disk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Disk.m; sourceTree = "<group>"; };
 		4587EDB71C64185B0064A816 /* Mac Multi-Tool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mac Multi-Tool.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4587EDBA1C64185B0064A816 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4587EDBB1C64185B0064A816 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -78,13 +89,14 @@
 		4587EDDE1C64185B0064A816 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4587EDEA1C642C380064A816 /* CNOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNOutlineView.h; sourceTree = "<group>"; };
 		4587EDEB1C642C380064A816 /* CNOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNOutlineView.m; sourceTree = "<group>"; };
+		45B611521C709B5A0031F42F /* ToolbarItem Eject.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ToolbarItem Eject.png"; sourceTree = "<group>"; };
+		45B611531C709B5A0031F42F /* ToolbarItem Info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ToolbarItem Info.png"; sourceTree = "<group>"; };
+		45B611541C709B5A0031F42F /* ToolbarItem Mount.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ToolbarItem Mount.png"; sourceTree = "<group>"; };
 		45BDE8D71C657AD7003F31B4 /* CNDiskList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNDiskList.h; sourceTree = "<group>"; };
 		45BDE8D81C657AD7003F31B4 /* CNDiskList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNDiskList.m; sourceTree = "<group>"; };
 		45BDE8DA1C658DC1003F31B4 /* CNDiskRep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNDiskRep.h; sourceTree = "<group>"; };
 		45BDE8DB1C658DC1003F31B4 /* CNDiskRep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNDiskRep.m; sourceTree = "<group>"; };
 		45C308FE1C66B53000235F05 /* DiskUtilityController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiskUtilityController.xib; sourceTree = "<group>"; };
-		45C309001C66B5A800235F05 /* DiskUtilityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskUtilityController.h; sourceTree = "<group>"; };
-		45C309011C66B5A800235F05 /* DiskUtilityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiskUtilityController.m; sourceTree = "<group>"; };
 		45C309091C66DF5600235F05 /* CNPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CNPopoverController.h; sourceTree = "<group>"; };
 		45C3090A1C66DF5600235F05 /* CNPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CNPopoverController.m; sourceTree = "<group>"; };
 		45C3090B1C66DF5600235F05 /* CNPopoverController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CNPopoverController.xib; sourceTree = "<group>"; };
@@ -120,6 +132,9 @@
 		453CE0D61C66937D00C044D0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				45B611521C709B5A0031F42F /* ToolbarItem Eject.png */,
+				45B611531C709B5A0031F42F /* ToolbarItem Info.png */,
+				45B611541C709B5A0031F42F /* ToolbarItem Mount.png */,
 				455590C31C683A060099B4F4 /* EjectMediaIcon.icns */,
 				455590C41C683A060099B4F4 /* SidebarExternalDisk.icns */,
 				455590C51C683A060099B4F4 /* SidebarInternalDisk.icns */,
@@ -175,8 +190,6 @@
 				45F34A951C670EFD00981A80 /* CNDiskUtilities */,
 				4587EDC31C64185B0064A816 /* Assets.xcassets */,
 				453CE0E11C66B03500C044D0 /* MainMenu.xib */,
-				4587EDEA1C642C380064A816 /* CNOutlineView.h */,
-				4587EDEB1C642C380064A816 /* CNOutlineView.m */,
 				4587EDC81C64185B0064A816 /* Info.plist */,
 				4587EDBD1C64185B0064A816 /* Supporting Files */,
 			);
@@ -212,8 +225,14 @@
 		45C309031C66B5B000235F05 /* Disk Utility */ = {
 			isa = PBXGroup;
 			children = (
-				45C309001C66B5A800235F05 /* DiskUtilityController.h */,
-				45C309011C66B5A800235F05 /* DiskUtilityController.m */,
+				4587EDEA1C642C380064A816 /* CNOutlineView.h */,
+				4587EDEB1C642C380064A816 /* CNOutlineView.m */,
+				455DA3CF1C70526A0002D061 /* DiskUtilityController.h */,
+				455DA3D01C70526A0002D061 /* DiskUtilityController.m */,
+				455DA3D21C70526A0002D061 /* Arbitration.m */,
+				455DA3D11C70526A0002D061 /* Arbitration.h */,
+				455DA3D31C70526A0002D061 /* Disk.h */,
+				455DA3D41C70526A0002D061 /* Disk.m */,
 				45C308FE1C66B53000235F05 /* DiskUtilityController.xib */,
 			);
 			name = "Disk Utility";
@@ -354,10 +373,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				455590CC1C683A060099B4F4 /* SidebarRemovableDisk.icns in Resources */,
+				45B611571C709B5A0031F42F /* ToolbarItem Mount.png in Resources */,
 				455590C81C683A060099B4F4 /* EjectMediaIcon.icns in Resources */,
 				455590CB1C683A060099B4F4 /* SidebarOpticalDisk.icns in Resources */,
 				455590CA1C683A060099B4F4 /* SidebarInternalDisk.icns in Resources */,
 				45C308FF1C66B53000235F05 /* DiskUtilityController.xib in Resources */,
+				45B611561C709B5A0031F42F /* ToolbarItem Info.png in Resources */,
+				45B611551C709B5A0031F42F /* ToolbarItem Eject.png in Resources */,
 				45C3090D1C66DF5600235F05 /* CNPopoverController.xib in Resources */,
 				455590C91C683A060099B4F4 /* SidebarExternalDisk.icns in Resources */,
 				4587EDC41C64185B0064A816 /* Assets.xcassets in Resources */,
@@ -388,14 +410,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				455DA3D71C70526A0002D061 /* Disk.m in Sources */,
 				45BDE8D91C657AD7003F31B4 /* CNDiskList.m in Sources */,
 				4587EDBF1C64185B0064A816 /* main.m in Sources */,
-				45C309021C66B5A800235F05 /* DiskUtilityController.m in Sources */,
 				45C3090C1C66DF5600235F05 /* CNPopoverController.m in Sources */,
 				455590C21C6830270099B4F4 /* AAPLImageAndTextCell.m in Sources */,
 				45BDE8DC1C658DC1003F31B4 /* CNDiskRep.m in Sources */,
 				4587EDEC1C642C380064A816 /* CNOutlineView.m in Sources */,
 				455590BD1C6828360099B4F4 /* STPrivilegedTask.m in Sources */,
+				455DA3D61C70526A0002D061 /* Arbitration.m in Sources */,
+				455DA3D51C70526A0002D061 /* DiskUtilityController.m in Sources */,
 				455590BC1C6828360099B4F4 /* README.md in Sources */,
 				45F34A941C670EE400981A80 /* CNDiskUtilities.m in Sources */,
 				4587EDBC1C64185B0064A816 /* AppDelegate.m in Sources */,

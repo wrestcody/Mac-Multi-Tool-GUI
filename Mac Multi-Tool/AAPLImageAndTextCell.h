@@ -8,7 +8,9 @@
 
 @import Cocoa;
 
-@interface AAPLImageAndTextCell : NSTextFieldCell
+@interface AAPLImageAndTextCell : NSTextFieldCell {
+    BOOL mIsEditingOrSelecting;
+}
 @property (readwrite, strong) NSImage *myImage;
 @property                     float    opacity;
 @end

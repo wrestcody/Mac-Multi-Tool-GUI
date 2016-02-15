@@ -27,7 +27,7 @@
     //NSTextStorage *newStorage = [[NSTextStorage alloc] initWithString: text];
     //[_info.layoutManager replaceTextStorage: newStorage];
     
-    [_info setNeedsDisplay:YES];
+    //[_info setNeedsDisplay:YES];
 }
 
 - (void)setTitle:(NSString *)text {

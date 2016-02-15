@@ -1,28 +1,23 @@
 //
-//  DiskUtilityController.m
-//  Mac Multi-Tool
+//  DiskArbApp.m
+//  DiskArbTest
 //
-//  Created by Kristopher Scruggs on 2/6/16.
+//  Created by Kristopher Scruggs on 2/10/16.
 //  Copyright © 2016 Corporate Newt Software. All rights reserved.
 //
 
 #import "DiskUtilityController.h"
-#import "CNPopoverController.h"
+#import "Arbitration.h"
+#import "Disk.h"
 #import "AAPLImageAndTextCell.h"
 
-@interface DiskUtilityController () <NSPopoverDelegate>
-
-@property (strong) NSPopover *myPopover;
-@property (strong) CNPopoverController *popoverViewController;
-
-@property (strong) NSWindow *detachedWindow;
-
-@end
+@import ServiceManagement;
+@import AppKit;
 
 #pragma mark -
 
 #define COLUMNID_NAME               @"Name"
-#define IMAGE_PAD                   6
+#define IMAGE_PAD                   3
 
 static NSSize imageSize;
 
@@ -30,13 +25,23 @@ static NSSize imageSize;
 
 @implementation DiskUtilityController
 
-- (id) init {
-    if(self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil]) {
+- (id)init {
+    if (self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil]) {
+        // Register default preferences - if they exist
         
+        // Disk Arbitration
+        RegisterDA();
+        
+        // App & Workspace Notification
+        [self registerSession];
+        
+        [[NSUserNotificationCenter defaultUserNotificationCenter] setDelegate:self];
     }
     
     return self;
 }
+
+#pragma mark - View Setup
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -45,63 +50,61 @@ static NSSize imageSize;
     //Set our image size here
     imageSize = NSMakeSize(16, 16);
     
+    [_outputText setFont:[NSFont fontWithName:@"Menlo" size:11]];
+    
+    _currentlyWorking = NO;
+    
     
     [_diskView setDataSource:(id<NSOutlineViewDataSource>)self];
     [_diskView setDelegate:(id<NSOutlineViewDelegate>)self];
     
     //Set up for receiving double-click notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(outlineViewDoubleClick:) name:@"OutlineViewDoubleClick" object:nil];
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(outlineViewDoubleClick:) name:@"OutlineViewDoubleClick" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(outlineViewSelected:) name:@"OutlineViewSelected" object:nil];
     
-    _disks = [[CNDiskList sharedList] getOutlineViewList];
+    //_disks = [[CNDiskList sharedList] getOutlineViewList];
+    
     //_disks = [[CNDiskList sharedList] getAllDisksAndPartitionsList];
     
-    NSLog(@"%@", [[[[_disks objectAtIndex:0] getChildren] objectAtIndex:1] getObjects]);
+    //NSLog(@"%@", [[[[_disks objectAtIndex:0] getChildren] objectAtIndex:1] getObjects]);
     
     
+    
+    // Clear the text fields in the window
+    [_mountPointText setStringValue:@""];
+    [_capacityText setStringValue:@""];
+    [_usedText setStringValue:@""];
+    [_uuidText setStringValue:@""];
+    [_typeText setStringValue:@""];
+    [_availableText setStringValue:@""];
+    [_deviceText setStringValue:@""];
+    
+    [_uuidText setSelectable:YES];
+    
+    //[_diskSize NSProgressIndicatorThickness]
     
     
     //Setup our popover button
-    _popoverViewController = [[NSClassFromString(@"CNPopoverController") alloc] init];
+    /*_popoverViewController = [[NSClassFromString(@"CNPopoverController") alloc] init];
     
     NSRect frame = self.popoverViewController.view.bounds;
     NSUInteger styleMask = NSTitledWindowMask + NSClosableWindowMask;
     NSRect rect = [NSWindow contentRectForFrameRect:frame styleMask:styleMask];
     _detachedWindow = [[NSWindow alloc] initWithContentRect:rect styleMask:styleMask backing:NSBackingStoreBuffered defer:YES];
     self.detachedWindow.contentViewController = self.popoverViewController;
-    self.detachedWindow.releasedWhenClosed = NO;
+    self.detachedWindow.releasedWhenClosed = NO;*/
     
     
     [_diskView reloadData];
+    //Load outlineview expanded.
+    [_diskView expandItem:nil expandChildren:YES];
 }
 
-- (void)createPopover
-{
-    if (self.myPopover == nil)
-    {
-        // create and setup our popover
-        _myPopover = [[NSPopover alloc] init];
-        
-        // the popover retains us and we retain the popover,
-        // we drop the popover whenever it is closed to avoid a cycle
-        
-        self.myPopover.contentViewController = self.popoverViewController;
-        self.myPopover.appearance = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
-        
-        self.myPopover.animates = YES;
-        
-        // AppKit will close the popover when the user interacts with a user interface element outside the popover.
-        // note that interacting with menus or panels that become key only when needed will not cause a transient popover to close.
-        self.myPopover.behavior = NSPopoverBehaviorTransient;
-        
-        // so we can be notified when the popover appears or closes
-        self.myPopover.delegate = self;
-    }
-}
+#pragma mark - OutlineView Click/Double-Click Methods
 
 - (void)outlineViewDoubleClick:(id)note {
-    //Load the disk that we just double clicked.
+    /*//Load the disk that we just double clicked.
     //_disks = [[CNDiskList sharedList] getDiskViewList:[note userInfo]];
     //[_diskView reloadData];
     _selected = [[[note userInfo] objectForKey:@"Rect"] rectValue];
@@ -114,51 +117,177 @@ static NSSize imageSize;
     
     [_popoverViewController setText:diskInfo];
     [_popoverViewController setTitle:diskName];
-    [self showPopoverAction:_diskView];
+    [self showPopoverAction:_diskView];*/
 }
 
 - (void)outlineViewSelected:(id)note {
-    //_selected = NSMakePoint([[[note userInfo] objectForKey:@"X" ] floatValue], [[[note userInfo] objectForKey:@"Y" ] floatValue]);
-    //_selected = [[note userInfo] rectValue];
+    // Reload all our info
+    [self respondToSelectedItem:_diskView];
 }
 
-// -------------------------------------------------------------------------------
-//  showPopoverAction:sender
-// -------------------------------------------------------------------------------
-- (IBAction)showPopoverAction:(id)sender
-{
-    if (self.detachedWindow.visible == YES) {
-        [self.detachedWindow close];
+#pragma mark - UI Methods
+
+- (void)respondToSelectedItem:(NSOutlineView *)outlineView {
+    id selectedItem = [outlineView itemAtRow:[outlineView selectedRow]];
+    if ([selectedItem isKindOfClass:[Disk class]]) {
+        // Let's enable/disable buttons based on disk info
+        Disk *disk = selectedItem;
+        [_ejectButton setEnabled:NO];
+        [_mountButton setEnabled:NO];
+        if ([disk isMounted]) {
+            if (![[disk volumePath] isEqualToString:@"/"]) {
+                [_ejectButton setEnabled:YES];
+            }
+        } else if ([disk isMountable]) {
+            [_mountButton setEnabled:YES];
+        } else if ([disk isWholeDisk] && ([disk isEjectable] || [disk isRemovable])) {
+            BOOL anyMounted = NO;
+            for (Disk *child in [disk children]) {
+                // Find out if all disks are unmounted
+                if ([child isMounted]) anyMounted = YES;
+            }
+            if (anyMounted) {
+                [_ejectButton setEnabled:YES];
+            } else {
+                [_mountButton setEnabled:YES];
+            }
+        }
+        
+        // Grab info from disk
+        // Setup top & bottom of window info
+        if ([disk volumeName]) {
+            [_diskNameField setStringValue:[disk volumeName]];
+        } else if ([disk mediaName]) {
+            [_diskNameField setStringValue:[disk mediaName]];
+        }
+        
+        // Get the icon
+        [_diskImageField setImage:disk.icon];
+        
+        // Build the info string - Size Connection FS
+        NSString *fs = @"No File System";
+        if ([disk volumeFS]) fs = [disk volumeFS];
+        NSString *infoString = [NSString stringWithFormat:@"%@ - %@ - %@ (%@)", [disk formattedSize], [disk deviceProtocol], fs, disk.BSDName];
+        [_diskInfoField setStringValue:infoString];
+        
+        if ([disk isWholeDisk]) {
+            // Set our labels first, then the values
+            [_mountPointPartitionMap setStringValue:@"Partition Map:"];
+            [_usedLocation setStringValue:@"Location:"];
+            [_typeConnection setStringValue:@"Connection:"];
+            [_availableChildren setStringValue:@"Children:"];
+            
+            [_mountPointText setStringValue:[disk mediaContent] ?: @"Unknown"];
+            [_capacityText setStringValue:[disk formattedSize] ?: @"Unknown"];
+            [_typeText setStringValue:[disk deviceProtocol] ?: @"Unknown"];
+            [_usedText setStringValue:[disk isInternal] ? @"Internal" : @"External"];
+            [_uuidText setStringValue:@"N/A"]; // Empty string for whole disk
+            [_availableText setStringValue:[NSString stringWithFormat:@"%lu", [disk.children count]]];
+            
+            [_diskSize setMaxValue:[[disk mediaSize] doubleValue]];
+            [_diskSize setDoubleValue:0];
+            [_diskSize incrementBy:[[disk mediaSize] doubleValue]];
+            
+        } else {
+            // Set our labels first, then the values
+            [_mountPointPartitionMap setStringValue:@"Mount Point:"];
+            [_usedLocation setStringValue:@"Used:"];
+            [_typeConnection setStringValue:@"Type:"];
+            [_availableChildren setStringValue:@"Available:"];
+            
+            [_mountPointText setStringValue:[disk volumePath] ?: @"Not Mounted"];
+            [_capacityText setStringValue:[disk formattedSize] ?: @"Unknown"];
+            [_usedText setStringValue:[disk formattedUsedSpace] ?: @"Unknown"];
+            [_typeText setStringValue:[disk volumeFS] ?: @"Unknown"];
+            [_availableText setStringValue:[disk formattedFreeSpace] ?: @"Unknown"];
+            [_uuidText setStringValue:disk.diskUUID ?: @"Unknown"];
+            
+            [_diskSize setMaxValue:[[disk mediaSize] doubleValue]];
+            [_diskSize setDoubleValue:0];
+            [_diskSize incrementBy:[[disk usedSpace] doubleValue]];
+        }
+        [_deviceText setStringValue:disk.BSDName ?: @"No BSD Name"];
+    }
+}
+
+- (IBAction)mountDisk:(id)sender {
+    id selectedItem = [_diskView itemAtRow:[_diskView selectedRow]];
+    if ([selectedItem isKindOfClass:[Disk class]]) {
+        Disk *disk = selectedItem;
+        
+        /*if ([disk isWholeDisk]) {
+            NSLog(@"diskutil mountDisk %@", disk.BSDName);
+        } else {
+            NSLog(@"diskutil mount %@", disk.BSDName);
+        }*/
+        if ([disk isWholeDisk]) {
+            [disk mountWhole];
+        } else {
+            [disk mount];
+        }
+    }
+}
+
+- (IBAction)ejectDisk:(id)sender {
+    id selectedItem = [_diskView itemAtRow:[_diskView selectedRow]];
+    if ([selectedItem isKindOfClass:[Disk class]]) {
+        Disk *disk = selectedItem;
+        
+        if (!disk) return;
+        
+        if ([disk isWholeDisk] && [disk isEjectable]) {
+            [self performEject:disk];
+        } else {
+            [disk unmountWithOptions: disk.isWholeDisk ?  kDiskUnmountOptionWhole : kDiskUnmountOptionDefault];
+        }
+        /*if ([disk isWholeDisk]) {
+            NSLog(@"diskutil unmountDisk %@", disk.BSDName);
+        } else {
+            NSLog(@"diskutil unmount %@", disk.BSDName);
+        }*/
+    }
+}
+
+- (void)performEject:(Disk *)disk {
+    BOOL waitForChildren = NO;
+    
+    NSArray *disks;
+    if (disk.isWholeDisk && disk.isLeaf)
+        disks = [NSArray arrayWithObject:disk];
+    else
+        disks = disk.children;
+    
+    for (Disk *aDisk in disks) {
+        if (aDisk.isMountable && aDisk.isMounted) {
+            /*[[NSNotificationCenter defaultCenter] addObserver:self
+                                                     selector:@selector(_childDidAttemptUnmountBeforeEject:)
+                                                         name:@"DADiskDidAttemptUnmountNotification"
+                                                       object:aDisk];*/
+            [aDisk unmountWithOptions:0];
+            waitForChildren = YES;
+        }
     }
     
-    [self createPopover];
-    
-    //NSButton *targetButton = (NSButton *)sender;
-    
-    // configure the preferred position of the popover
-    NSRectEdge prefEdge = 1;
-    
-    //[self.myPopover showRelativeToRect:targetButton.bounds ofView:sender preferredEdge:prefEdge];
-    [self.myPopover showRelativeToRect:_selected ofView:sender preferredEdge:prefEdge];
+    if (!waitForChildren) {
+        if (disk.isEjectable)
+            [disk eject];
+    }
 }
 
-#pragma mark -
-#pragma mark Outline View Delegate Methods
+
+#pragma mark - Outline View Delegate Methods
 
 
 - (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item
 {
     if (item == nil) {
         // Root
-        return [_disks objectAtIndex:index];
+        return [diskArray objectAtIndex:index];
     }
     
-    if ([item isKindOfClass:[CNDiskRep class]]) {
-        return [item childAtIndex:index];
-    }
-    
-    if ([item isKindOfClass:[NSArray class]]) {
-        return [item objectAtIndex:index];
+    if ([item isKindOfClass:[Disk class]]) {
+        Disk *disk = item;
+        return [disk.children objectAtIndex:index];
     }
     
     return nil;
@@ -169,11 +298,10 @@ static NSSize imageSize;
     if ([item isKindOfClass:[NSArray class]]) {
         return YES;
     }
-    if ([item isKindOfClass:[CNDiskRep class]]) {
-        if ([item hasChildren]) {
+    if ([item isKindOfClass:[Disk class]]) {
+        Disk *disk = item;
+        if ([disk.children count] > 0) {
             return YES;
-        } else {
-            return NO;
         }
     }
     return NO;
@@ -183,15 +311,16 @@ static NSSize imageSize;
 {
     if (item == nil) {
         // Root
-        return [_disks count];
+        return [diskArray count];
     }
     
-    if ([item isKindOfClass:[CNDiskRep class]] && [item hasChildren]) {
+    /*if ([item isKindOfClass:[Disk class]] && [item hasChildren]) {
         return [[item getChildren] count];
-    }
+    }*/
     
-    if ([item isKindOfClass:[NSArray class]]) {
-        return [item count];
+    if ([item isKindOfClass:[Disk class]]) {
+        Disk *disk = item;
+        return [disk.children count];
     }
     
     return 0;
@@ -199,101 +328,85 @@ static NSSize imageSize;
 
 - (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(nullable NSTableColumn *)tableColumn byItem:(nullable id)item {
     
-    if ([item isKindOfClass:[CNDiskRep class]]) {
+    if ([item isKindOfClass:[Disk class]]) {
         
-        //Check for nil and return if so
-        if (![item objectForKey:[tableColumn identifier]]) {
-            return nil;
-        }
+        // Setup some variables
         
+        Disk *disk = item;
         NSColor *color = [NSColor blackColor];
-        //Set up the text color
-        if ([item isChild]) {
+        NSString *diskName = @"";
+        
+        // Color accordingly:
+        // Boot drive = Blue
+        // Whole disk = Black
+        // Parition   = Dark Gray
+        
+        if ([[disk volumePath] isEqualToString:@"/"]) {
+            color = [NSColor blueColor];
+        } else if ([disk isMounted]) {
+            color = [NSColor blackColor];
+        } else if ([disk isWholeDisk]) {
+            BOOL anyMounted = NO;
+            for (Disk *child in [disk children]) {
+                // Find out if all disks are unmounted
+                if ([child isMounted]) anyMounted = YES;
+            }
+            if (!anyMounted) color = [NSColor darkGrayColor];
+        } else {
             color = [NSColor darkGrayColor];
         }
         
-        //Set text color to blue if boot drive/partition
-        if ([item isBoot] && [[tableColumn identifier] isEqualToString:COLUMNID_NAME]) {
-            color = [NSColor blueColor];
+        // Get a name for our disk
+        // If whole disk - mediaName
+        // if not, volumeName
+        
+        if ([disk volumeName]) {
+            diskName = [disk volumeName];
+        } else if ([disk mediaName]) {
+            diskName = [disk mediaName];
         }
+        
+        // Setup our string and return it
         
         NSDictionary *attrs = @{ NSForegroundColorAttributeName : color };
-        
-        if ([[tableColumn identifier] isEqualToString:@"SizeReadable"] || [[tableColumn identifier] isEqualToString:@"DeviceIdentifier"]) {
-            
-            //Set pararaph style to align right, and rebuild attributes dictionary
-            NSMutableParagraphStyle *paragrahStyle = [[NSMutableParagraphStyle alloc] init];
-            [paragrahStyle setAlignment:NSTextAlignmentRight];
-            
-            NSDictionary *attrs = @{
-                                    NSForegroundColorAttributeName : color,
-                                    NSParagraphStyleAttributeName : paragrahStyle
-                                    };
-            
-            return [[NSAttributedString alloc] initWithString:[item objectForKey:[tableColumn identifier]] attributes:attrs];
-        }
-        
-        //Just return whatever is left
-        return [[NSAttributedString alloc] initWithString:[item objectForKey:[tableColumn identifier]] attributes:attrs];
+        return [[NSAttributedString alloc] initWithString:diskName attributes:attrs];
     }
     
     return nil;
 }
 
 - (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(NSCell *)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item {
-    if ((tableColumn == nil) || [[tableColumn identifier] isEqualToString:COLUMNID_NAME]) {
-        // Set up some images - *try* to determine appropriate icon per disk type
-        NSString *busProtocol = [[item getObjects] objectForKey:@"BusProtocol"];
-        NSString *opticalDrive = [[item getObjects] objectForKey:@"OpticalDeviceType"];
-        NSString *mountPoint = [[item getObjects] objectForKey:@"MountPoint"];
-        BOOL internal    = [[[item getObjects] objectForKey:@"Internal"] boolValue];
-        NSImage *diskImageOrig;
-        
-        //Set up defaults if either string is nil
-        if (busProtocol == nil) {
-            busProtocol = @"SATA";
-        }
-        
-        if (opticalDrive == nil) {
-            //Find out what disk to use
-            if ([busProtocol isEqualToString:@"SATA"] && internal) {
-                diskImageOrig = [NSImage imageNamed:@"SidebarInternalDisk"];
-            } else if ([busProtocol isEqualToString:@"SATA"] && !internal) {
-                diskImageOrig = [NSImage imageNamed:@"SidebarExternalDisk"];
-            } else if ([busProtocol isEqualToString:@"USB"] && !internal) {
-                diskImageOrig = [NSImage imageNamed:@"SidebarRemovableDisk"];
-            } else if ([busProtocol isEqualToString:@"SATA"] && internal) {
-                diskImageOrig = [NSImage imageNamed:@"SidebarInternalDisk"];
-            } else if ([busProtocol isEqualToString:@"Disk Image"]) {
-                diskImageOrig = [NSImage imageNamed:@"SidebarRemovableDisk"];
+    if ([item isKindOfClass:[Disk class]]) {
+        Disk *currentDisk = item;
+        if ((tableColumn == nil) || [[tableColumn identifier] isEqualToString:COLUMNID_NAME]) {
+            NSImage *tempImage = [currentDisk.icon copy];
+            
+            NSImage *diskImage = [self imageResize:tempImage newSize:imageSize];
+            // We know that the cell at this column is our image and text cell, so grab it
+            AAPLImageAndTextCell *imageAndTextCell = (AAPLImageAndTextCell *)cell;
+            // Set the image here since the value returned from outlineView:objectValueForTableColumn:... didn't specify the image part...
+            imageAndTextCell.myImage = diskImage;
+            if ([currentDisk isWholeDisk]) {
+                imageAndTextCell.opacity = 1;
             } else {
-                diskImageOrig = [NSImage imageNamed:@"SidebarInternalDisk"];
+                if ([currentDisk isMounted]) {
+                    imageAndTextCell.opacity = 0.9;
+                } else {
+                    imageAndTextCell.opacity = 0.4;
+                }
             }
-        } else {
-            diskImageOrig = [NSImage imageNamed:@"SidebarOpticalDisk"];
         }
-        
-        //NSImage *diskImageOrig = [NSImage imageNamed:@"SidebarInternalDisk"];
-        NSImage *diskImage = [self imageResize:diskImageOrig newSize:imageSize];
-        // We know that the cell at this column is our image and text cell, so grab it
-        AAPLImageAndTextCell *imageAndTextCell = (AAPLImageAndTextCell *)cell;
-        // Set the image here since the value returned from outlineView:objectValueForTableColumn:... didn't specify the image part...
-        imageAndTextCell.myImage = diskImage;
-        if ([item isChild]) {
-            if ([mountPoint isEqualToString:@""]) {
-                imageAndTextCell.opacity = .5;
-            } else {
-                imageAndTextCell.opacity = .8;
-            }
-        } else {
-            imageAndTextCell.opacity = 1;
-        }
-    }
     // For all the other columns, we don't do anything.
+    }
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
     return imageSize.height + IMAGE_PAD;
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView
+   shouldSelectItem:(id)item {
+    return !_currentlyWorking;
 }
 
 #pragma mark - Resize NSImage
@@ -317,94 +430,79 @@ static NSSize imageSize;
     return nil;
 }
 
-#pragma mark - NSPopoverDelegate
 
-// -------------------------------------------------------------------------------
-// Invoked on the delegate when the NSPopoverWillShowNotification notification is sent.
-// This method will also be invoked on the popover.
-// -------------------------------------------------------------------------------
-- (void)popoverWillShow:(NSNotification *)notification
-{
-    NSPopover *popover = notification.object;
-    if (popover != nil)
-    {
-        //... operate on that popover
-    }
-}
+#pragma mark - Notification Methods
 
-// -------------------------------------------------------------------------------
-// Invoked on the delegate when the NSPopoverDidShowNotification notification is sent.
-// This method will also be invoked on the popover.
-// -------------------------------------------------------------------------------
-- (void)popoverDidShow:(NSNotification *)notification
-{
-    // add new code here after the popover has been shown
-}
-
-// -------------------------------------------------------------------------------
-// Invoked on the delegate when the NSPopoverWillCloseNotification notification is sent.
-// This method will also be invoked on the popover.
-// -------------------------------------------------------------------------------
-- (void)popoverWillClose:(NSNotification *)notification
-{
-    NSString *closeReason = [notification.userInfo valueForKey:NSPopoverCloseReasonKey];
-    if (closeReason)
-    {
-        // closeReason can be:
-        //      NSPopoverCloseReasonStandard
-        //      NSPopoverCloseReasonDetachToWindow
-        //
-        // add new code here if you want to respond "before" the popover closes
-        //
-    }
-}
-
-// -------------------------------------------------------------------------------
-// Invoked on the delegate when the NSPopoverDidCloseNotification notification is sent.
-// This method will also be invoked on the popover.
-// -------------------------------------------------------------------------------
-- (void)popoverDidClose:(NSNotification *)notification
-{
-    NSString *closeReason = [notification.userInfo valueForKey:NSPopoverCloseReasonKey];
-    if (closeReason)
-    {
-        // closeReason can be:
-        //      NSPopoverCloseReasonStandard
-        //      NSPopoverCloseReasonDetachToWindow
-        //
-        // add new code here if you want to respond "after" the popover closes
-        //
-    }
+- (void)diskAppeared:(NSNotification *)notification {
+    Disk *disk = notification.object;
     
-    // release our popover since it closed
-    _myPopover = nil;
+    //NSLog(@"Volume Path: %@", disk.volumePath);
+    //NSLog(@"Disk Appeared: %@", disk.BSDName);
+    NSLog(@"Description: %@", disk.description);
+
+    //NSLog(@"Disks Count - %lu", (unsigned long)[allDisks count]);
+    //NSLog(@"Disks:\n%@", diskArray);
+    
+    [_diskView reloadData];
+    [self respondToSelectedItem:_diskView];
 }
 
-// -------------------------------------------------------------------------------
-// Invoked on the delegate to give permission to detach popover as a separate window.
-// -------------------------------------------------------------------------------
-- (BOOL)popoverShouldDetach:(NSPopover *)popover
-{
-    return YES;
+- (void)diskDisappeared:(NSNotification *)notification {
+    Disk *disk = notification.object;
+    
+   // NSLog(@"Disk Disappeared - %@", disk.BSDName);
+    
+    [disk disappeared];
+    
+    [_diskView reloadData];
+    [self respondToSelectedItem:_diskView];
 }
 
-// -------------------------------------------------------------------------------
-// Invoked on the delegate to when the popover was detached.
-// Note: Invoked only if AppKit provides the window for this popover.
-// -------------------------------------------------------------------------------
-- (void)popoverDidDetach:(NSPopover *)popover
-{
-    NSLog(@"popoverDidDetach");
+- (void)volumeMountNotification:(NSNotification *) notification {
+    /*Disk *disk = [Disk getDiskForUserInfo:notification.userInfo];
+    
+    if (disk) {
+        //NSLog(@"Disk: '%@' mounted at '%@'", disk.BSDName, disk.volumePath);
+    }*/
+    
+    [_diskView reloadData];
+    [self respondToSelectedItem:_diskView];
+    
 }
 
-// -------------------------------------------------------------------------------
-// Invoked on the delegate asked for the detachable window for the popover.
-// -------------------------------------------------------------------------------
-- (NSWindow *)detachableWindowForPopover:(NSPopover *)popover
-{
-    NSWindow *window = nil;
-    return window;
+- (void)volumeUnmountNotification:(NSNotification *) notification {
+    /*Disk *disk = [Disk getDiskForUserInfo:notification.userInfo];
+    
+    if (disk) {
+        //NSLog(@"Disk: '%@' unmounted from '%@'", disk.BSDName, disk.volumePath);
+    }*/
+    
+    [_diskView reloadData];
+    [self respondToSelectedItem:_diskView];
 }
+
+#pragma mark - Private Methods
+
+- (void)registerSession {
+    // App Level Notification
+    NSNotificationCenter *acenter = [NSNotificationCenter defaultCenter];
+    
+    [acenter addObserver:self selector:@selector(diskAppeared:) name:@"diskAppearedNotification" object:nil];
+    [acenter addObserver:self selector:@selector(diskDisappeared:) name:@"diskDisappearedNotification" object:nil];
+    
+    // Workspace Level Notification
+    NSNotificationCenter *wcenter = [[NSWorkspace sharedWorkspace] notificationCenter];
+    
+    [wcenter addObserver:self selector:@selector(volumeMountNotification:) name:NSWorkspaceDidMountNotification object:nil];
+    [wcenter addObserver:self selector:@selector(volumeUnmountNotification:) name:NSWorkspaceDidUnmountNotification object:nil];
+}
+
+- (void)unregisterSession {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:self];
+}
+
 
 
 @end
