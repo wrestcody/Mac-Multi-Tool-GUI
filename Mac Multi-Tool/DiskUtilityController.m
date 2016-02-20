@@ -25,8 +25,14 @@ static NSSize imageSize;
 
 @implementation DiskUtilityController
 
+@synthesize shouldResize;
+
 - (id)init {
     if (self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil]) {
+        
+        // Don't resize this window
+        shouldResize = NO;
+        
         // Register default preferences - if they exist
         
         // Disk Arbitration
@@ -39,6 +45,10 @@ static NSSize imageSize;
     }
     
     return self;
+}
+
+- (BOOL)shouldResize {
+    return shouldResize;
 }
 
 #pragma mark - View Setup

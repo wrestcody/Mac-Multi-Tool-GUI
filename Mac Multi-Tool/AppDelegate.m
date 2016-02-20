@@ -159,6 +159,18 @@
         [self.window setContentView:newView];
         [self.window setFrame:windowRect display:YES animate:shouldAnimate];
         
+        // To create a window that can resize:
+        // [window setStyleMask:[window styleMask] | NSResizableWindowMask];
+        //
+        // To create one that CANNOT resize:
+        // [window setStyleMask:[window styleMask] & ~NSResizableWindowMask];
+        
+        //if ([_currentViewController shouldResize]) {
+            
+        //}
+        
+        [self.window setStyleMask:[self.window styleMask] & ~NSResizableWindowMask];
+        
     }
     else{
         NSAssert(false, @"Couldn't load %@", class);

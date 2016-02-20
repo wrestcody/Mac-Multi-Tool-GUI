@@ -54,8 +54,11 @@ enum {
 
 @property NSArray *disks;
 @property NSRect selected;
+@property BOOL shouldResize;
 
 //Work with this more later - right now just a placeholder.
 @property BOOL currentlyWorking;
+
+- (BOOL)shouldResize;
 
 @end
