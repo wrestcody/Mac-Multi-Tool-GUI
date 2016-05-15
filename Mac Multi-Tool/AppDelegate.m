@@ -55,6 +55,12 @@
     _toolbar.delegate = self;
     self.window.toolbar = _toolbar;
     
+    
+    //Try to save window's position
+    //NSWindow *window = self.window; // the window in question
+    [[self.window windowController] setShouldCascadeWindows:NO];      // Tell the controller to not cascade its windows.
+    [self.window setFrameAutosaveName:[self.window representedFilename]];  // Specify the autosave name for the window.
+    
     [self.window makeKeyAndOrderFront:nil];
     
     //Try to set disk utitily to the main window - just for the sake of doing it
@@ -65,6 +71,8 @@
     
     //This line loads nothing
     //[_toolbar setSelectedItemIdentifier:@""];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:@"NSQuitAlwaysKeepsWindows"];
 }
 
 
