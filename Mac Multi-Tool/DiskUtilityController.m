@@ -385,10 +385,10 @@ static NSSize imageSize;
     
     for (Disk *aDisk in disks) {
         if (aDisk.isMountable && aDisk.isMounted) {
-            /*[[NSNotificationCenter defaultCenter] addObserver:self
+            [[NSNotificationCenter defaultCenter] addObserver:self
                                                      selector:@selector(_childDidAttemptUnmountBeforeEject:)
                                                          name:@"DADiskDidAttemptUnmountNotification"
-                                                       object:aDisk];*/
+                                                       object:aDisk];
             [aDisk unmountWithOptions:0];
             waitForChildren = YES;
         }
@@ -605,6 +605,41 @@ static NSSize imageSize;
     
     [_diskView reloadData];
     [self respondToSelectedItem:_diskView];
+}
+
+- (void)_childDidAttemptUnmountBeforeEject:(NSNotification *) notification {
+    Disk *disk = notification.object;
+    
+    //Check if disk is whole disk or not.
+    Disk *parent = disk.isWholeDisk ? disk : disk.parent;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"DADiskDidAttemptUnmountNotification" object:disk];
+    
+    //confirm child unmounted...
+    
+    if (disk.isMounted) {
+        // Unmount of child failed.
+        [self appendOutput:[NSString stringWithFormat:@"Failed to unmount disk: %@\n", parent.BSDName]];
+        [self appendOutput:[NSString stringWithFormat:@"Canceled due to mounted child: %@\n", disk.BSDName]];
+        
+        //NSMutableDictionary *info = (NSMutableDictionary *)[notification userInfo];
+        
+        //[[NSNotificationCenter defaultCenter] postNotificationName:@"DADiskDidAttemptEjectNotification" object:disk userInfo:info];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"DADiskDidAttemptEjectNotification" object:disk userInfo:nil];
+    }
+    
+    // Child from notification is unmounted, check for remaining children to unmount
+    
+    for (Disk *child in parent.children) {
+        if (child.isMounted)
+            return;			// Still waiting for child
+    }
+    
+    // Need to test if parent is ejectable because we enable "Eject" for a disk
+    // that has children that can be unmounted (ala Disk Utility)
+    
+    if (parent.isEjectable)
+        [parent eject];
 }
 
 #pragma mark - Private Methods
