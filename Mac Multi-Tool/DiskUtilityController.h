@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
 #import "CNOutlineView.h"
+#import "Disk.h"
 
 enum {
     kDiskUnmountOptionDefault = 0x00000000,
@@ -24,6 +25,7 @@ enum {
 @property (weak) IBOutlet NSButton *verifyDiskButton;
 @property (weak) IBOutlet NSButton *repairDiskButton;
 @property (weak) IBOutlet NSButton *repairPermissionsButton;
+@property (weak) IBOutlet NSProgressIndicator *taskRunning;
 @property IBOutlet NSTextView *outputText;
 
 @property (assign) IBOutlet NSTableView *tableView;
@@ -53,8 +55,10 @@ enum {
 
 
 @property NSArray *disks;
+@property Disk *currentDisk;
 @property NSRect selected;
-@property BOOL shouldResize;
+@property BOOL _shouldResize;
+@property BOOL runningTask;
 
 //Work with this more later - right now just a placeholder.
 @property BOOL currentlyWorking;

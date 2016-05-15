@@ -10,7 +10,6 @@
 		453CE0D81C66938800C044D0 /* disk_utility.png in Resources */ = {isa = PBXBuildFile; fileRef = 453CE0D71C66938800C044D0 /* disk_utility.png */; };
 		453CE0E21C66B03500C044D0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 453CE0E11C66B03500C044D0 /* MainMenu.xib */; };
 		455590BC1C6828360099B4F4 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 455590B81C6828360099B4F4 /* README.md */; };
-		455590BD1C6828360099B4F4 /* STPrivilegedTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 455590BA1C6828360099B4F4 /* STPrivilegedTask.m */; };
 		455590BE1C6828360099B4F4 /* STPrivilegedTask.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 455590BB1C6828360099B4F4 /* STPrivilegedTask.podspec */; };
 		455590C21C6830270099B4F4 /* AAPLImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 455590C11C6830270099B4F4 /* AAPLImageAndTextCell.m */; };
 		455590C81C683A060099B4F4 /* EjectMediaIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 455590C31C683A060099B4F4 /* EjectMediaIcon.icns */; };
@@ -21,6 +20,7 @@
 		455DA3D51C70526A0002D061 /* DiskUtilityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 455DA3D01C70526A0002D061 /* DiskUtilityController.m */; };
 		455DA3D61C70526A0002D061 /* Arbitration.m in Sources */ = {isa = PBXBuildFile; fileRef = 455DA3D21C70526A0002D061 /* Arbitration.m */; };
 		455DA3D71C70526A0002D061 /* Disk.m in Sources */ = {isa = PBXBuildFile; fileRef = 455DA3D41C70526A0002D061 /* Disk.m */; };
+		4578BA461CE8808900A91F51 /* STPrivilegedTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 4578BA451CE8808900A91F51 /* STPrivilegedTask.m */; };
 		4587EDBC1C64185B0064A816 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4587EDBB1C64185B0064A816 /* AppDelegate.m */; };
 		4587EDBF1C64185B0064A816 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4587EDBE1C64185B0064A816 /* main.m */; };
 		4587EDC41C64185B0064A816 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4587EDC31C64185B0064A816 /* Assets.xcassets */; };
@@ -59,8 +59,6 @@
 		453CE0D71C66938800C044D0 /* disk_utility.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = disk_utility.png; path = Images/disk_utility.png; sourceTree = "<group>"; };
 		453CE0E11C66B03500C044D0 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		455590B81C6828360099B4F4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		455590B91C6828360099B4F4 /* STPrivilegedTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STPrivilegedTask.h; sourceTree = "<group>"; };
-		455590BA1C6828360099B4F4 /* STPrivilegedTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STPrivilegedTask.m; sourceTree = "<group>"; };
 		455590BB1C6828360099B4F4 /* STPrivilegedTask.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = STPrivilegedTask.podspec; sourceTree = "<group>"; };
 		455590C01C6830270099B4F4 /* AAPLImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPLImageAndTextCell.h; sourceTree = "<group>"; };
 		455590C11C6830270099B4F4 /* AAPLImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAPLImageAndTextCell.m; sourceTree = "<group>"; };
@@ -75,6 +73,8 @@
 		455DA3D21C70526A0002D061 /* Arbitration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Arbitration.m; sourceTree = "<group>"; };
 		455DA3D31C70526A0002D061 /* Disk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Disk.h; sourceTree = "<group>"; };
 		455DA3D41C70526A0002D061 /* Disk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Disk.m; sourceTree = "<group>"; };
+		4578BA441CE8808900A91F51 /* STPrivilegedTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STPrivilegedTask.h; sourceTree = "<group>"; };
+		4578BA451CE8808900A91F51 /* STPrivilegedTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STPrivilegedTask.m; sourceTree = "<group>"; };
 		4587EDB71C64185B0064A816 /* Mac Multi-Tool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mac Multi-Tool.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4587EDBA1C64185B0064A816 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4587EDBB1C64185B0064A816 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -225,6 +225,7 @@
 		45C309031C66B5B000235F05 /* Disk Utility */ = {
 			isa = PBXGroup;
 			children = (
+				45F34A8A1C670E1E00981A80 /* STPriviledgedTask */,
 				4587EDEA1C642C380064A816 /* CNOutlineView.h */,
 				4587EDEB1C642C380064A816 /* CNOutlineView.m */,
 				455DA3CF1C70526A0002D061 /* DiskUtilityController.h */,
@@ -251,9 +252,9 @@
 		45F34A8A1C670E1E00981A80 /* STPriviledgedTask */ = {
 			isa = PBXGroup;
 			children = (
+				4578BA441CE8808900A91F51 /* STPrivilegedTask.h */,
+				4578BA451CE8808900A91F51 /* STPrivilegedTask.m */,
 				455590B81C6828360099B4F4 /* README.md */,
-				455590B91C6828360099B4F4 /* STPrivilegedTask.h */,
-				455590BA1C6828360099B4F4 /* STPrivilegedTask.m */,
 				455590BB1C6828360099B4F4 /* STPrivilegedTask.podspec */,
 			);
 			name = STPriviledgedTask;
@@ -264,7 +265,6 @@
 			children = (
 				45F34A921C670EE400981A80 /* CNDiskUtilities.h */,
 				45F34A931C670EE400981A80 /* CNDiskUtilities.m */,
-				45F34A8A1C670E1E00981A80 /* STPriviledgedTask */,
 			);
 			name = CNDiskUtilities;
 			sourceTree = "<group>";
@@ -417,11 +417,11 @@
 				455590C21C6830270099B4F4 /* AAPLImageAndTextCell.m in Sources */,
 				45BDE8DC1C658DC1003F31B4 /* CNDiskRep.m in Sources */,
 				4587EDEC1C642C380064A816 /* CNOutlineView.m in Sources */,
-				455590BD1C6828360099B4F4 /* STPrivilegedTask.m in Sources */,
 				455DA3D61C70526A0002D061 /* Arbitration.m in Sources */,
 				455DA3D51C70526A0002D061 /* DiskUtilityController.m in Sources */,
 				455590BC1C6828360099B4F4 /* README.md in Sources */,
 				45F34A941C670EE400981A80 /* CNDiskUtilities.m in Sources */,
+				4578BA461CE8808900A91F51 /* STPrivilegedTask.m in Sources */,
 				4587EDBC1C64185B0064A816 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

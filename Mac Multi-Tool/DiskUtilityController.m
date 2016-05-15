@@ -8,8 +8,8 @@
 
 #import "DiskUtilityController.h"
 #import "Arbitration.h"
-#import "Disk.h"
 #import "AAPLImageAndTextCell.h"
+#import "STPrivilegedTask.h"
 
 @import ServiceManagement;
 @import AppKit;
@@ -25,15 +25,18 @@ static NSSize imageSize;
 
 @implementation DiskUtilityController
 
-@synthesize shouldResize;
+@synthesize _shouldResize;
 
 - (id)init {
     if (self = [super initWithNibName:NSStringFromClass(self.class) bundle:nil]) {
         
         // Don't resize this window
-        shouldResize = NO;
+        _shouldResize = YES;
         
         // Register default preferences - if they exist
+        _currentDisk = nil;
+        _runningTask = NO;
+        [_taskRunning setUsesThreadedAnimation:YES];
         
         // Disk Arbitration
         RegisterDA();
@@ -48,7 +51,7 @@ static NSSize imageSize;
 }
 
 - (BOOL)shouldResize {
-    return shouldResize;
+    return _shouldResize;
 }
 
 #pragma mark - View Setup
@@ -72,6 +75,9 @@ static NSSize imageSize;
     //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(outlineViewDoubleClick:) name:@"OutlineViewDoubleClick" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(outlineViewSelected:) name:@"OutlineViewSelected" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(privilegedTaskFinished:) name:STPrivilegedTaskDidTerminateNotification object:nil];
+
     
     //_disks = [[CNDiskList sharedList] getOutlineViewList];
     
@@ -131,22 +137,32 @@ static NSSize imageSize;
 }
 
 - (void)outlineViewSelected:(id)note {
-    // Reload all our info
-    [self respondToSelectedItem:_diskView];
+    if (!_runningTask) {
+        // Reload all our info
+        [self respondToSelectedItem:_diskView];
+    }
 }
 
 #pragma mark - UI Methods
 
 - (void)respondToSelectedItem:(NSOutlineView *)outlineView {
+   
     id selectedItem = [outlineView itemAtRow:[outlineView selectedRow]];
     if ([selectedItem isKindOfClass:[Disk class]]) {
         // Let's enable/disable buttons based on disk info
         Disk *disk = selectedItem;
+        _currentDisk = disk;
+        [_repairDiskButton setEnabled:YES];
+        [_verifyDiskButton setEnabled:YES];
         [_ejectButton setEnabled:NO];
         [_mountButton setEnabled:NO];
+        [_repairPermissionsButton setEnabled:NO];
         if ([disk isMounted]) {
             if (![[disk volumePath] isEqualToString:@"/"]) {
                 [_ejectButton setEnabled:YES];
+            } else {
+                [_repairPermissionsButton setEnabled:YES];
+                [_repairDiskButton setEnabled:NO];
             }
         } else if ([disk isMountable]) {
             [_mountButton setEnabled:YES];
@@ -217,6 +233,57 @@ static NSSize imageSize;
             [_diskSize incrementBy:[[disk usedSpace] doubleValue]];
         }
         [_deviceText setStringValue:disk.BSDName ?: @"No BSD Name"];
+    }
+}
+
+-(IBAction)repairPermissions:(id)sender {
+    NSLog(@"Repair Permissions");
+    if (_currentDisk != nil && [_currentDisk volumePath]) {
+        NSLog(@"Disk: %@", [_currentDisk volumePath]);
+        //Build our privileged task for verifying disk
+        
+        //Disable buttons
+        [self disableButtons];
+        
+        [self appendOutput:@"Repairing permissions...\n"];
+        
+        [self launchPTWithPath:@"/usr/libexec/repair_packages" arguments:[NSArray arrayWithObjects:@"--repair", @"--standard-pkgs", @"--volume", [_currentDisk volumePath], nil]];
+    }
+}
+
+-(IBAction)verifyDisk:(id)sender {
+    NSLog(@"Verify Disk");
+    if (_currentDisk != nil) {
+        NSLog(@"Disk: %@", _currentDisk.BSDName);
+        //Build our privileged task for verifying disk
+        
+        NSString *task = @"verifyVolume";
+        if ([_currentDisk isWholeDisk]) {
+            task = @"verifyDisk";
+        }
+        
+        //Disable buttons
+        [self disableButtons];
+        
+        [self launchPTWithPath:@"/usr/sbin/diskutil" arguments:[NSArray arrayWithObjects:task, _currentDisk.BSDName, nil]];
+    }
+}
+
+-(IBAction)repairDisk:(id)sender {
+    NSLog(@"Repair Disk");
+    if (_currentDisk != nil) {
+        NSLog(@"Disk: %@", _currentDisk.BSDName);
+        //Build our privileged task for repairing disk
+        
+        NSString *task = @"repairVolume";
+        if ([_currentDisk isWholeDisk]) {
+            task = @"repairDisk";
+        }
+        
+        //Disable buttons
+        [self disableButtons];
+        
+        [self launchPTWithPath:@"/usr/sbin/diskutil" arguments:[NSArray arrayWithObjects:task, _currentDisk.BSDName, nil]];
     }
 }
 
@@ -416,7 +483,7 @@ static NSSize imageSize;
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView
    shouldSelectItem:(id)item {
-    return !_currentlyWorking;
+    return !_runningTask;
 }
 
 #pragma mark - Resize NSImage
@@ -511,6 +578,80 @@ static NSSize imageSize;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:self];
+}
+
+- (void)launchPTWithPath:(NSString *)path arguments:(NSArray *)args {
+    //Build our privileged task
+    STPrivilegedTask *privilegedTask = [[STPrivilegedTask alloc] init];
+    [privilegedTask setLaunchPath:path];
+    [privilegedTask setArguments:args];
+    
+    //Launch our privileged task
+    _runningTask=YES;
+    [_taskRunning setHidden:NO];
+    [_taskRunning startAnimation:nil];
+    OSStatus err = [privilegedTask launch];
+    if (err != errAuthorizationSuccess) {
+        if (err == errAuthorizationCanceled) {
+            NSLog(@"User cancelled");
+        } else {
+            NSLog(@"Something went wrong");
+        }
+    } else {
+        NSLog(@"Task successfully launched");
+    }
+    
+    //Get output in background
+    NSFileHandle *readHandle = [privilegedTask outputFileHandle];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getOutputData:) name:NSFileHandleReadCompletionNotification object:readHandle];
+    [readHandle readInBackgroundAndNotify];
+}
+
+- (void)getOutputData:(NSNotification *)aNotification {
+    //get data from notification
+    NSData *data = [[aNotification userInfo] objectForKey:NSFileHandleNotificationDataItem];
+    
+    //make sure there's actual data
+    if ([data length]) {
+        // do something with the data
+        
+        NSString *output = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        [self appendOutput:output];
+        
+        // go read more data in the background
+        [[aNotification object] readInBackgroundAndNotify];
+    } else {
+        // do something else
+    }
+}
+
+- (void)appendOutput:(NSString *)output {
+    NSString *outputWithNewLine = [output stringByAppendingString:@""];
+    
+    //Smart Scrolling
+    BOOL scroll = (NSMaxY(_outputText.visibleRect) == NSMaxY(_outputText.bounds));
+    
+    //Append string to textview
+    [_outputText.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:outputWithNewLine]];
+    
+    if (scroll) [_outputText scrollRangeToVisible:NSMakeRange(_outputText.string.length, 0)];
+}
+
+- (void)privilegedTaskFinished:(NSNotification *)aNotification {
+    // add 3 blank lines of output and end task.
+    [self appendOutput:@"\nComplete.\n\n\n"];
+    [_taskRunning setHidden:YES];
+    [_taskRunning stopAnimation:nil];
+    [self respondToSelectedItem:_diskView];
+    _runningTask = NO;
+}
+
+- (void)disableButtons {
+    [_repairPermissionsButton setEnabled:NO];
+    [_repairDiskButton setEnabled:NO];
+    [_verifyDiskButton setEnabled:NO];
+    [_ejectButton setEnabled:NO];
+    [_mountButton setEnabled:NO];
 }
 
 

@@ -165,7 +165,7 @@
         // To create one that CANNOT resize:
         // [window setStyleMask:[window styleMask] & ~NSResizableWindowMask];
         
-        //if ([_currentViewController shouldResize]) {
+        //if (_currentViewController.shouldResize) {
             
         //}
         
