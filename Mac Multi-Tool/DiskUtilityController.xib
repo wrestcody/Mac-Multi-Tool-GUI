@@ -22,6 +22,7 @@
                 <outlet property="mountPointPartitionMap" destination="cGV-XZ-I0o" id="CLB-bR-hd9"/>
                 <outlet property="mountPointText" destination="7wd-Nr-CUF" id="IWH-yG-KlD"/>
                 <outlet property="outputText" destination="7Eg-Cu-2Nb" id="BMF-xP-5cJ"/>
+                <outlet property="rebuildKextCacheButton" destination="t73-pX-cad" id="Qxg-CI-tz0"/>
                 <outlet property="repairDiskButton" destination="KO1-PX-z3R" id="ms4-sO-LS2"/>
                 <outlet property="repairPermissionsButton" destination="PxU-Ls-1rb" id="NoO-AQ-bmI"/>
                 <outlet property="taskRunning" destination="Q4J-y8-9fS" id="oX0-Ve-eKv"/>
@@ -73,7 +74,7 @@
                         <nil key="backgroundColor"/>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="N1M-vh-1ke">
-                        <rect key="frame" x="-7" y="8" width="0.0" height="15"/>
+                        <rect key="frame" x="1" y="448" width="248" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="hed-vV-OYf">
@@ -96,7 +97,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PxU-Ls-1rb">
-                    <rect key="frame" x="630" y="14" width="156" height="32"/>
+                    <rect key="frame" x="524" y="14" width="156" height="32"/>
                     <buttonCell key="cell" type="push" title="Repair Permissions" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dQp-iJ-txJ">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -336,6 +337,16 @@
                 <progressIndicator hidden="YES" wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Q4J-y8-9fS">
                     <rect key="frame" x="842" y="15" width="32" height="32"/>
                 </progressIndicator>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t73-pX-cad">
+                    <rect key="frame" x="680" y="14" width="160" height="32"/>
+                    <buttonCell key="cell" type="push" title="Rebuild Kext-Cache" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bmp-cP-uZP">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="rebuildKextCache:" target="-2" id="pKh-JZ-c0k"/>
+                    </connections>
+                </button>
             </subviews>
             <point key="canvasLocation" x="625" y="798"/>
         </customView>

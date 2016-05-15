@@ -24,6 +24,7 @@ enum {
 @property (weak) IBOutlet CNOutlineView *diskView;
 @property (weak) IBOutlet NSButton *verifyDiskButton;
 @property (weak) IBOutlet NSButton *repairDiskButton;
+@property (weak) IBOutlet NSButton *rebuildKextCacheButton;
 @property (weak) IBOutlet NSButton *repairPermissionsButton;
 @property (weak) IBOutlet NSProgressIndicator *taskRunning;
 @property IBOutlet NSTextView *outputText;
@@ -55,6 +56,7 @@ enum {
 
 
 @property NSArray *disks;
+@property NSMutableArray *tasksToRun;
 @property Disk *currentDisk;
 @property NSRect selected;
 @property BOOL _shouldResize;

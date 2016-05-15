@@ -37,6 +37,7 @@ static NSSize imageSize;
         _currentDisk = nil;
         _runningTask = NO;
         [_taskRunning setUsesThreadedAnimation:YES];
+        _tasksToRun = [[NSMutableArray alloc] init];
         
         // Disk Arbitration
         RegisterDA();
@@ -146,6 +147,8 @@ static NSSize imageSize;
 #pragma mark - UI Methods
 
 - (void)respondToSelectedItem:(NSOutlineView *)outlineView {
+    
+    [_rebuildKextCacheButton setEnabled:YES];
    
     id selectedItem = [outlineView itemAtRow:[outlineView selectedRow]];
     if ([selectedItem isKindOfClass:[Disk class]]) {
@@ -236,6 +239,38 @@ static NSSize imageSize;
     }
 }
 
+-(IBAction)rebuildKextCache:(id)sender {
+    NSLog(@"Rebuild Kext Cache");
+    // We need to run a couple terminal commands to get this done
+    // rm -r /System/Library/Caches/com.apple.kext.caches
+    // touch /System/Library/Extensions
+    // kextcache -update-volume /
+    //
+    //One after the other - and all with admin privs.
+    
+    //Disable buttons
+    //[self disableButtons];
+    
+    //[self appendOutput:@"Rebuilding kext cache...\n"];
+    
+    // rm -r /System/Library/Caches/com.apple.kext/caches
+    NSString *path = @"/bin/rm";
+    NSArray *args = [NSArray arrayWithObjects:@"-r", @"/System/Library/Caches/com.apple.kext.caches", nil];
+    [_tasksToRun addObject:[NSDictionary dictionaryWithObjectsAndKeys:path, @"Path", args, @"Args", @"Removing /System/Library/Caches/com.apple.kext.caches...\n", @"Start Message", nil]];
+    
+    // touch /System/Library/Extensions
+    path = @"/usr/bin/touch";
+    args = [NSArray arrayWithObjects:@"/System/Library/Extensions", nil];
+    [_tasksToRun addObject:[NSDictionary dictionaryWithObjectsAndKeys:path, @"Path", args, @"Args", @"Touching /System/Library/Extensions...\n", @"Start Message", nil]];
+    
+    // kextcache -update-volume /
+    path = @"/usr/sbin/kextcache";
+    args = [NSArray arrayWithObjects:@"-update-volume", @"/", nil];
+    [_tasksToRun addObject:[NSDictionary dictionaryWithObjectsAndKeys:path, @"Path", args, @"Args", @"Rebuilding Kext Cache...\n", @"Start Message", @"Complete.\n\n\n", @"End Message", nil]];
+    
+    [self launchNextTask];
+}
+
 -(IBAction)repairPermissions:(id)sender {
     NSLog(@"Repair Permissions");
     if (_currentDisk != nil && [_currentDisk volumePath]) {
@@ -243,11 +278,15 @@ static NSSize imageSize;
         //Build our privileged task for verifying disk
         
         //Disable buttons
-        [self disableButtons];
+        //[self disableButtons];
         
-        [self appendOutput:@"Repairing permissions...\n"];
+        //[self appendOutput:@"Repairing permissions...\n"];
         
-        [self launchPTWithPath:@"/usr/libexec/repair_packages" arguments:[NSArray arrayWithObjects:@"--repair", @"--standard-pkgs", @"--volume", [_currentDisk volumePath], nil]];
+        //[self launchPTWithPath:@"/usr/libexec/repair_packages" arguments:[NSArray arrayWithObjects:@"--repair", @"--standard-pkgs", @"--volume", [_currentDisk volumePath], nil]];*/
+        NSString *path = @"/usr/libexec/repair_packages";
+        NSArray *args = [NSArray arrayWithObjects:@"--repair", @"--standard-pkgs", @"--volume", [_currentDisk volumePath], nil];
+        [_tasksToRun addObject:[NSDictionary dictionaryWithObjectsAndKeys:path, @"Path", args, @"Args", @"Complete.\n\n\n", @"End Message", @"Repairing permissions...\n", @"Start Message", nil]];
+        [self launchNextTask];
     }
 }
 
@@ -263,9 +302,14 @@ static NSSize imageSize;
         }
         
         //Disable buttons
-        [self disableButtons];
+        //[self disableButtons];
         
-        [self launchPTWithPath:@"/usr/sbin/diskutil" arguments:[NSArray arrayWithObjects:task, _currentDisk.BSDName, nil]];
+        //[self launchPTWithPath:@"/usr/sbin/diskutil" arguments:[NSArray arrayWithObjects:task, _currentDisk.BSDName, nil]];
+        
+        NSString *path = @"/usr/sbin/diskutil";
+        NSArray *args = [NSArray arrayWithObjects:task, _currentDisk.BSDName, nil];
+        [_tasksToRun addObject:[NSDictionary dictionaryWithObjectsAndKeys:path, @"Path", args, @"Args", @"Complete.\n\n\n", @"End Message", nil]];
+        [self launchNextTask];
     }
 }
 
@@ -281,9 +325,14 @@ static NSSize imageSize;
         }
         
         //Disable buttons
-        [self disableButtons];
+        //[self disableButtons];
         
-        [self launchPTWithPath:@"/usr/sbin/diskutil" arguments:[NSArray arrayWithObjects:task, _currentDisk.BSDName, nil]];
+        //[self launchPTWithPath:@"/usr/sbin/diskutil" arguments:[NSArray arrayWithObjects:task, _currentDisk.BSDName, nil]];
+        
+        NSString *path = @"/usr/sbin/diskutil";
+        NSArray *args = [NSArray arrayWithObjects:task, _currentDisk.BSDName, nil];
+        [_tasksToRun addObject:[NSDictionary dictionaryWithObjectsAndKeys:path, @"Path", args, @"Args", @"Complete.\n\n\n", @"End Message", nil]];
+        [self launchNextTask];
     }
 }
 
@@ -580,6 +629,20 @@ static NSSize imageSize;
     [[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:self];
 }
 
+- (void)launchNextTask {
+    if (!_runningTask) {
+        //We're not doing anything yet - so let's start a task
+        if ([_tasksToRun count] > 0) {
+            //There indeed ARE tasks to run :D
+            NSString *path = [[_tasksToRun objectAtIndex:0] objectForKey:@"Path"];
+            NSArray *args = [[_tasksToRun objectAtIndex:0] objectForKey:@"Args"];
+            [self launchPTWithPath:path arguments:args];
+        }
+        //No tasks - we're done.
+    }
+    //Currently running tasks - nothing to do yet.
+}
+
 - (void)launchPTWithPath:(NSString *)path arguments:(NSArray *)args {
     //Build our privileged task
     STPrivilegedTask *privilegedTask = [[STPrivilegedTask alloc] init];
@@ -590,21 +653,30 @@ static NSSize imageSize;
     _runningTask=YES;
     [_taskRunning setHidden:NO];
     [_taskRunning startAnimation:nil];
+    [self disableButtons];
+    
     OSStatus err = [privilegedTask launch];
     if (err != errAuthorizationSuccess) {
         if (err == errAuthorizationCanceled) {
             NSLog(@"User cancelled");
+            [self appendOutput:@"\nUser Canceled.\n\n\n"];
         } else {
             NSLog(@"Something went wrong");
+            [self appendOutput:@"\nSomething Went Wrong :(\n\n\n"];
         }
     } else {
-        NSLog(@"Task successfully launched");
-    }
+        NSLog(@"%@ successfully launched", path);
+        
+        //Check for a launch message...
+        if ([[_tasksToRun objectAtIndex:0] objectForKey:@"Start Message"]) {
+            [self appendOutput:[[_tasksToRun objectAtIndex:0] objectForKey:@"Start Message"]];
+        }
     
-    //Get output in background
-    NSFileHandle *readHandle = [privilegedTask outputFileHandle];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getOutputData:) name:NSFileHandleReadCompletionNotification object:readHandle];
-    [readHandle readInBackgroundAndNotify];
+        //Get output in background
+        NSFileHandle *readHandle = [privilegedTask outputFileHandle];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getOutputData:) name:NSFileHandleReadCompletionNotification object:readHandle];
+        [readHandle readInBackgroundAndNotify];
+    }
 }
 
 - (void)getOutputData:(NSNotification *)aNotification {
@@ -639,15 +711,25 @@ static NSSize imageSize;
 
 - (void)privilegedTaskFinished:(NSNotification *)aNotification {
     // add 3 blank lines of output and end task.
-    [self appendOutput:@"\nComplete.\n\n\n"];
+    if ([[_tasksToRun objectAtIndex:0] objectForKey:@"End Message"]) {
+        [self appendOutput:[[_tasksToRun objectAtIndex:0] objectForKey:@"End Message"]];
+    }
     [_taskRunning setHidden:YES];
     [_taskRunning stopAnimation:nil];
     [self respondToSelectedItem:_diskView];
     _runningTask = NO;
+    
+    //Remove the finished task and
+    //try to launch the next task if it exists
+    if ([_tasksToRun count] > 0) {
+        [_tasksToRun removeObjectAtIndex:0];
+        [self launchNextTask];
+    }
 }
 
 - (void)disableButtons {
     [_repairPermissionsButton setEnabled:NO];
+    [_rebuildKextCacheButton setEnabled:NO];
     [_repairDiskButton setEnabled:NO];
     [_verifyDiskButton setEnabled:NO];
     [_ejectButton setEnabled:NO];

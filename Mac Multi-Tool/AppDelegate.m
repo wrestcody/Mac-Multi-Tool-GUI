@@ -55,9 +55,16 @@
     _toolbar.delegate = self;
     self.window.toolbar = _toolbar;
     
-    
-    
     [self.window makeKeyAndOrderFront:nil];
+    
+    //Try to set disk utitily to the main window - just for the sake of doing it
+    //until I get a decent amount of apps running...
+    //Eventually - I want this loaded with prefs.
+    [_toolbar setSelectedItemIdentifier:@"DiskUtilityController"];
+    [self loadViewWithIdentifier:@"DiskUtilityController" withAnimation:YES];
+    
+    //This line loads nothing
+    //[_toolbar setSelectedItemIdentifier:@""];
 }
 
 
