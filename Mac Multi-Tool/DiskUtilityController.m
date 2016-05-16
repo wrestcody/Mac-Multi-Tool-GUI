@@ -695,9 +695,17 @@ static NSSize imageSize;
         if (err == errAuthorizationCanceled) {
             NSLog(@"User cancelled");
             [self appendOutput:@"\nUser Canceled.\n\n\n"];
+            [_taskRunning setHidden:YES];
+            [_taskRunning stopAnimation:nil];
+            [self respondToSelectedItem:_diskView];
+            _runningTask = NO;
         } else {
             NSLog(@"Something went wrong");
             [self appendOutput:@"\nSomething Went Wrong :(\n\n\n"];
+            [_taskRunning setHidden:YES];
+            [_taskRunning stopAnimation:nil];
+            [self respondToSelectedItem:_diskView];
+            _runningTask = NO;
         }
     } else {
         NSLog(@"%@ successfully launched", path);
