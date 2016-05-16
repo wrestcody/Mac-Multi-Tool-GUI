@@ -699,6 +699,11 @@ static NSSize imageSize;
             [_taskRunning stopAnimation:nil];
             [self respondToSelectedItem:_diskView];
             _runningTask = NO;
+            
+            //Remove all tasks since we failed to authent.
+            if ([_tasksToRun count] > 0) {
+                [_tasksToRun removeAllObjects];
+            }
         } else {
             NSLog(@"Something went wrong");
             [self appendOutput:@"\nSomething Went Wrong :(\n\n\n"];
@@ -706,6 +711,12 @@ static NSSize imageSize;
             [_taskRunning stopAnimation:nil];
             [self respondToSelectedItem:_diskView];
             _runningTask = NO;
+            
+            //Remove current task due to error - and move to the next.
+            if ([_tasksToRun count] > 0) {
+                [_tasksToRun removeObjectAtIndex:0];
+                [self launchNextTask];
+            }
         }
     } else {
         NSLog(@"%@ successfully launched", path);
